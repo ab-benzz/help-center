@@ -525,6 +525,62 @@
         // }
 
 
+        // function renderMobileSubtopics(topic) {
+        //     const mobileSubtopics = document.getElementById("mobile-subtopics");
+        //     mobileSubtopics.innerHTML = "";
+
+        //     // Update breadcrumb
+        //     document.getElementById("breadcrumb").textContent = `Help Center > ${topic}`;
+
+        //     // Highlight active main topic
+        //     document.querySelectorAll(".main-topic-btn").forEach(btn => {
+        //         btn.classList.toggle("active", btn.textContent === topic);
+        //     });
+
+        //     // Loop through subtopics
+        //     Object.keys(helpData[topic]).forEach(sub => {
+        //         const subDiv = document.createElement("div");
+        //         subDiv.className = "mobile-subtopic";
+
+        //         const subBtn = document.createElement("button");
+        //         subBtn.className = "subtopic-btn";
+        //         subBtn.textContent = sub;
+
+        //         const qContainer = document.createElement("div");
+        //         qContainer.className = "questions";
+
+        //         // Build questions
+        //         helpData[topic][sub].forEach(q => {
+        //             const qBtn = document.createElement("button");
+        //             qBtn.className = "question-btn";
+        //             qBtn.textContent = q.question;
+        //             qBtn.addEventListener("click", () => {
+        //                 activeMobileSubtopic = sub;
+        //                 showMobileAnswer(topic, sub, q);
+        //             });
+        //             qContainer.appendChild(qBtn);
+        //         });
+
+        //         // Restore previously active subtopic dropdown
+        //         if (activeMobileSubtopic === sub) qContainer.classList.add("open");
+
+        //         // Subtopic click → toggle open, close others
+        //         subBtn.addEventListener("click", () => {
+        //             document.querySelectorAll("#mobile-subtopics .questions.open").forEach(el => {
+        //                 if (el !== qContainer) el.classList.remove("open");
+        //             });
+        //             qContainer.classList.toggle("open");
+        //             activeMobileSubtopic = qContainer.classList.contains("open") ? sub : null;
+        //         });
+
+        //         subDiv.appendChild(subBtn);
+        //         subDiv.appendChild(qContainer);
+        //         mobileSubtopics.appendChild(subDiv);
+        //     });
+        // }
+
+
+
         function renderMobileSubtopics(topic) {
             const mobileSubtopics = document.getElementById("mobile-subtopics");
             mobileSubtopics.innerHTML = "";
@@ -579,7 +635,6 @@
             });
         }
 
-
         function showMobileAnswer(topic, subtopic, questionObj) {
             const mobileSubtopics = document.getElementById("mobile-subtopics");
             mobileSubtopics.innerHTML = ""; // Clear subtopics view
@@ -594,6 +649,10 @@
             backBtn.className = "back-btn";
             backBtn.addEventListener("click", () => {
                 breadcrumb.textContent = `Help Center > ${topic} > ${subtopic}`;
+
+                // Set the active subtopic before rendering
+                activeMobileSubtopic = subtopic;
+
                 // renderMobileSubtopics(topic); // Rebuild subtopics/questions view
                 renderMobileSubtopics(activeMobileTopic);
 
