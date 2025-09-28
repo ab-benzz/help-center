@@ -1,0 +1,200 @@
+<div id="help-center">
+    <h1>Help Center</h1>
+
+    <input type="text" id="search" placeholder="Search our help center...">
+    <div id="search-results" class="search-results"></div>
+    <div id="help-topics"></div>
+</div>
+
+<style>
+    #help-center {
+        max-width: 800px;
+        margin: auto;
+        font-family: Arial, sans-serif;
+        line-height: 1.5;
+        position: relative;
+    }
+
+    #help-center h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    #search {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 5px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+    }
+
+    .search-results {
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        background: #fff;
+        position: absolute;
+        width: 100%;
+        max-height: 300px;
+        overflow-y: auto;
+        z-index: 10;
+        display: none;
+    }
+
+    .search-item {
+        padding: 10px;
+        cursor: pointer;
+        border-bottom: 1px solid #eee;
+    }
+
+    .search-item:hover {
+        background: #f1f1f1;
+    }
+
+    .topic {
+        margin-bottom: 30px;
+    }
+
+    .topic h2 {
+        font-size: 1.4rem;
+        margin-bottom: 10px;
+    }
+
+    .section h3 {
+        font-size: 1.1rem;
+        margin: 15px 0 8px;
+        color: #333;
+    }
+
+    .question {
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: 10px;
+        margin: 5px 0;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        background: #f9f9f9;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    .question:hover {
+        background: #f1f1f1;
+    }
+
+    .answer {
+        display: none;
+        padding: 10px;
+        border: 1px solid #eee;
+        border-radius: 6px;
+        margin-bottom: 10px;
+        background: #fff;
+    }
+</style>
+
+<script>
+    const helpData = {
+        "Product Inquiry": {
+            "Stock and Inventory": [
+                { "question": "How can I know the status of my order?", "answer": "Log in to your account and check under <b>My Orders</b>." },
+                { "question": "Where can I find my order tracking number?", "answer": "You will receive the tracking number in your email once the order is shipped." }
+            ],
+            "Product Details": [
+                { "question": "How can I see product specifications?", "answer": "Specifications are listed on the product detail page under <b>Description</b>." }
+            ]
+        },
+        "Payment & Promos": {
+            "General": [
+                { "question": "What payment methods do you accept?", "answer": "We accept credit cards, debit cards, and e-wallets." }
+            ],
+            "Benz": [
+                { "question": "What payment methods do you accept?", "answer": "We accept credit cards, debit cards, and e-wallets." }
+            ]
+        }
+    };
+
+    const searchInput = document.getElementById("search");
+    const searchResults = document.getElementById("search-results");
+
+    function renderTopics(data) {
+        const container = document.getElementById("help-topics");
+        container.innerHTML = "";
+
+        Object.keys(data).forEach(topic => {
+            const topicEl = document.createElement("div");
+            topicEl.classList.add("topic");
+
+            const heading = document.createElement("h2");
+            heading.textContent = topic;
+            topicEl.appendChild(heading);
+
+            Object.keys(data[topic]).forEach(section => {
+                const sectionEl = document.createElement("div");
+                sectionEl.classList.add("section");
+
+                const secHeading = document.createElement("h3");
+                secHeading.textContent = section;
+                sectionEl.appendChild(secHeading);
+
+                data[topic][section].forEach(item => {
+                    const qEl = document.createElement("button");
+                    qEl.textContent = item.question;
+                    qEl.classList.add("question");
+
+                    const aEl = document.createElement("div");
+                    aEl.innerHTML = item.answer;
+                    aEl.classList.add("answer");
+
+                    qEl.addEventListener("click", () => {
+                        aEl.style.display = aEl.style.display === "none" ? "block" : "none";
+                    });
+
+                    sectionEl.appendChild(qEl);
+                    sectionEl.appendChild(aEl);
+                });
+
+                topicEl.appendChild(sectionEl);
+            });
+
+            container.appendChild(topicEl);
+        });
+    }
+
+    function searchHelp(term) {
+        searchResults.innerHTML = "";
+        if (!term) {
+            searchResults.style.display = "none";
+            return;
+        }
+
+        const matches = [];
+        Object.keys(helpData).forEach(topic => {
+            Object.keys(helpData[topic]).forEach(section => {
+                helpData[topic][section].forEach(item => {
+                    const text = (item.question + " " + item.answer).toLowerCase();
+                    if (text.includes(term)) {
+                        matches.push(item);
+                    }
+                });
+            });
+        });
+
+        matches.forEach(item => {
+            const div = document.createElement("div");
+            div.classList.add("search-item");
+            div.innerHTML = `<b>${item.question}</b><br><small>${item.answer}</small>`;
+            div.addEventListener("click", () => {
+                alert(`Answer: ${item.answer}`);
+            });
+            searchResults.appendChild(div);
+        });
+
+        searchResults.style.display = matches.length ? "block" : "none";
+    }
+
+    searchInput.addEventListener("input", e => {
+        searchHelp(e.target.value.toLowerCase());
+    });
+
+    renderTopics(helpData);
+</script>

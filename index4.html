@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Help Center - Dropdown Layout</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            color: #222;
+        }
+
+        #help-center {
+            max-width: 1000px;
+            margin: auto;
+            position: relative;
+        }
+
+        #search {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 6px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        .search-results {
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: #fff;
+            position: absolute;
+            width: 100%;
+            max-height: 280px;
+            overflow-y: auto;
+            z-index: 20;
+            display: none;
+        }
+
+        .search-item {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+        }
+
+        .search-item:hover {
+            background: #f1f1f1;
+        }
+
+        .help-layout {
+            display: flex;
+            gap: 20px;
+            margin-top: 6px;
+        }
+
+        .sidebar {
+            flex: 0 0 240px;
+            border-right: 1px solid #ddd;
+            padding-right: 10px;
+            min-height: 320px;
+        }
+
+        .sidebar button {
+            display: block;
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 4px;
+            border: none;
+            text-align: left;
+            background: #f9f9f9;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .topic-btn {
+            background: #f9f9f9;
+            font-weight: 600;
+        }
+
+        .topic-btn.active {
+            background: #e9f2ff;
+            color: #0047b3;
+        }
+
+        .question-list-btn {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            padding: 6px 8px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .question-list-btn.active {
+            background: #007bff;
+            color: #fff;
+        }
+
+        .content {
+            flex: 1;
+            padding-left: 10px;
+        }
+
+        .answer {
+            padding: 12px;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            margin-top: 10px;
+            background: #fff;
+        }
+
+        .breadcrumb {
+            margin: 12px 0;
+            font-size: 0.95rem;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="help-center">
+        <input type="text" id="search" placeholder="Search our help center...">
+        <div id="search-results" class="search-results" aria-hidden="true"></div>
+
+        <div class="breadcrumb" id="breadcrumb">Help Center</div>
+
+        <div class="help-layout">
+            <div id="sidebar" class="sidebar"></div>
+            <div id="help-content" class="content"></div>
+        </div>
+    </div>
+
+    <script>
+        /* ====== sample data ====== */
+        const helpData = {
+            "Product Inquiry": {
+                "Warranty and Repairs": [
+                    {
+                        "question": "How long is the warranty?",
+                        "answer": "All our gadgets come with a 1-year warranty from the brand unless stated otherwise."
+                    },
+                    {
+                        "question": "Can I still have my gadget repaired without the official receipt?",
+                        "answer": "Yes! Just send us your:<ul><li>Name</li><li>Address</li><li>Product model</li><li>Order Number</li><li>Date of purchase</li></ul>Even without the receipt, we can validate your request."
+                    }
+                ],
+                "Product Details": [
+                    { "question": "How can I see product specifications?", "answer": "Specifications are listed on the product detail page under <b>Description</b>." }
+                ]
+            },
+            "Payment & Promos": {
+                "General": [
+                    { "question": "What payment methods do you accept?", "answer": "We accept credit cards, debit cards, and e-wallets." }
+                ]
+            }
+        };
+
+        /* ====== DOM elements ====== */
+        const sidebar = document.getElementById('sidebar');
+        const content = document.getElementById('help-content');
+        const searchInput = document.getElementById('search');
+        const searchResults = document.getElementById('search-results');
+
+        /* ====== render sidebar as dropdown ====== */
+        function renderSidebarDropdown() {
+            sidebar.innerHTML = '';
+
+            Object.keys(helpData).forEach(topic => {
+                // Topic button
+                const topicBtn = document.createElement('button');
+                topicBtn.className = 'topic-btn';
+                topicBtn.textContent = topic + ' ▾';
+                sidebar.appendChild(topicBtn);
+
+                // Questions container (dropdown)
+                const questionsDiv = document.createElement('div');
+                questionsDiv.style.display = 'none';
+                questionsDiv.style.marginLeft = '10px';
+                questionsDiv.style.marginTop = '4px';
+                questionsDiv.style.marginBottom = '8px';
+
+                Object.keys(helpData[topic]).forEach(section => {
+                    helpData[topic][section].forEach(item => {
+                        const qBtn = document.createElement('button');
+                        qBtn.className = 'question-list-btn';
+                        qBtn.textContent = item.question;
+                        qBtn.addEventListener('click', () => {
+                            renderAnswerOnRight(item);
+                            // highlight active
+                            [...sidebar.querySelectorAll('.question-list-btn')].forEach(b => b.classList.remove('active'));
+                            qBtn.classList.add('active');
+                        });
+                        questionsDiv.appendChild(qBtn);
+                    });
+                });
+
+                sidebar.appendChild(questionsDiv);
+
+                // Toggle dropdown
+                topicBtn.addEventListener('click', () => {
+                    questionsDiv.style.display = questionsDiv.style.display === 'none' ? 'block' : 'none';
+                });
+            });
+        }
+
+        /* ====== render answer on right panel ====== */
+        function renderAnswerOnRight(item) {
+            content.innerHTML = '';
+            const qh = document.createElement('h2');
+            qh.textContent = item.question;
+            const ans = document.createElement('div');
+            ans.className = 'answer';
+            ans.innerHTML = item.answer;
+            content.appendChild(qh);
+            content.appendChild(ans);
+        }
+
+        /* ====== search logic ====== */
+        function searchHelp(term) {
+            searchResults.innerHTML = '';
+            if (!term) {
+                searchResults.style.display = 'none';
+                return;
+            }
+            const lower = term.toLowerCase();
+            const matches = [];
+            Object.keys(helpData).forEach(topic => {
+                Object.keys(helpData[topic]).forEach(section => {
+                    helpData[topic][section].forEach(item => {
+                        const plainAnswer = item.answer.replace(/<[^>]+>/g, '');
+                        const text = (item.question + ' ' + plainAnswer + ' ' + section + ' ' + topic).toLowerCase();
+                        if (text.includes(lower)) {
+                            matches.push({ topic, section, item });
+                        }
+                    });
+                });
+            });
+
+            matches.forEach(match => {
+                const div = document.createElement('div');
+                div.className = 'search-item';
+                div.innerHTML = `<b>${match.item.question}</b><br><small>${match.section} — ${match.topic}</small>`;
+                div.addEventListener('click', () => {
+                    renderAnswerOnRight(match.item);
+                    searchResults.style.display = 'none';
+                    searchInput.value = '';
+                });
+                searchResults.appendChild(div);
+            });
+
+            searchResults.style.display = matches.length ? 'block' : 'none';
+        }
+
+        /* ====== init ====== */
+        function init() {
+            renderSidebarDropdown();
+
+            searchInput.addEventListener('input', e => {
+                searchHelp(e.target.value.trim());
+            });
+
+            document.addEventListener('click', (ev) => {
+                if (!searchResults.contains(ev.target) && ev.target !== searchInput) {
+                    searchResults.style.display = 'none';
+                }
+            });
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

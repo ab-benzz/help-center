@@ -1,0 +1,337 @@
+<div id="help-center">
+    <!-- <h1>Help Center</h1> -->
+    <input type="text" id="search" placeholder="Search our help center...">
+    <div id="search-results" class="search-results"></div>
+
+    <div class="help-layout">
+        <!-- Sidebar -->
+        <div id="sidebar" class="sidebar"></div>
+
+        <!-- Content -->
+        <div id="help-topics" class="content"></div>
+    </div>
+</div>
+
+<style>
+    #help-center {
+        max-width: 1000px;
+        margin: auto;
+        font-family: Arial, sans-serif;
+        line-height: 1.5;
+        position: relative;
+    }
+
+    #help-center h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    #search {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 5px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+    }
+
+    .search-results {
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        background: #fff;
+        position: absolute;
+        width: 100%;
+        max-height: 300px;
+        overflow-y: auto;
+        z-index: 10;
+        display: none;
+    }
+
+    .search-item {
+        padding: 10px;
+        cursor: pointer;
+        border-bottom: 1px solid #eee;
+    }
+
+    .search-item:hover {
+        background: #f1f1f1;
+    }
+
+    .help-layout {
+        display: flex;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .sidebar {
+        flex: 0 0 220px;
+        border-right: 1px solid #ddd;
+        padding-right: 15px;
+    }
+
+    .sidebar button {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 5px;
+        border: none;
+        text-align: left;
+        background: #f9f9f9;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    .sidebar button.active {
+        background: #007bff;
+        color: #fff;
+    }
+
+    .content {
+        flex: 1;
+    }
+
+    .topic {
+        margin-bottom: 30px;
+    }
+
+    .topic h2 {
+        font-size: 1.4rem;
+        margin-bottom: 10px;
+    }
+
+    .section h3 {
+        font-size: 1.1rem;
+        margin: 15px 0 8px;
+        color: #333;
+    }
+
+    .question {
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: 10px;
+        margin: 5px 0;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        background: #f9f9f9;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    .question:hover {
+        background: #f1f1f1;
+    }
+
+    .answer {
+        display: none;
+        padding: 10px;
+        /* border: 1px solid #eee; */
+        /* border-radius: 6px; */
+        margin-bottom: 10px;
+        margin-left: 32px;
+        /* background: #bdbcbc; */
+    }
+</style>
+<script>
+    const helpData = {
+        "Product Inquiry": {
+            "Stock and Inventory": [
+                {
+                    "question": "How can I know the status of my order?", "answer": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur quis sint nisi. Ab, tempore? Molestias sit odio porro sint perspiciatis. Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur quis sint nisi. Ab, tempore? Molestias sit odio porro sint perspiciatis."
+                },
+                { "question": "Where can I find my order tracking number?", "answer": "You will receive the tracking number in your email once the order is shipped." },
+                { "question": "How can I live without you?", "answer": "Log in to your account and check under <b>My Orders</b>." },
+                { "question": "Benz pogii?", "answer": "You will receive the tracking number in your email once the order is shipped." },
+                { "question": "How can I know the status of my ordshit?", "answer": "Log in to your account and check under <b>My Orders</b>." },
+                { "question": "Yes hey yes?", "answer": "You will receive the tracking number in your email once the order is shipped." }
+            ],
+            "Product Details": [
+                { "question": "How can I see product specifications?", "answer": "Specifications are listed on the product detail page under <b>Description</b>." }
+            ]
+        },
+        "Payment & Promos": {
+            "General": [
+                { "question": "What payment methods do you accept?", "answer": "We accept credit cards, debit cards, and e-wallets." }
+            ]
+        },
+        "After Sales Requests": {
+            "Returns": [
+                { "question": "How do I request a return?", "answer": "Go to <b>My Orders</b> and select <b>Request Return</b>." }
+            ]
+        },
+        "Benz Pogi": {
+            "Returns": [
+                { "question": "How do I request a return?", "answer": "Go to <b>My Orders</b> and select <b>Request Return</b>." }
+            ]
+
+        },
+        "Damage infos": {
+            "Returns": [
+                { "question": "How do I request a retursn?", "answer": "Go to <b>My Orders</b> and select <b>Request Return</b>." }
+            ]
+        }
+    };
+
+    const searchInput = document.getElementById("search");
+    const searchResults = document.getElementById("search-results");
+    const sidebar = document.getElementById("sidebar");
+    const content = document.getElementById("help-topics");
+
+    function renderSidebar() {
+        sidebar.innerHTML = "";
+        Object.keys(helpData).forEach((topic, index) => {
+            const btn = document.createElement("button");
+            btn.textContent = topic;
+            if (index === 0) btn.classList.add("active"); // default active first
+            btn.addEventListener("click", () => {
+                document.querySelectorAll(".sidebar button").forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                renderTopic(topic);
+            });
+            sidebar.appendChild(btn);
+        });
+    }
+
+    function renderTopic(topic) {
+        content.innerHTML = "";
+        const topicEl = document.createElement("div");
+        topicEl.classList.add("topic");
+
+        const heading = document.createElement("h2");
+        heading.textContent = topic;
+        topicEl.appendChild(heading);
+
+        Object.keys(helpData[topic]).forEach(section => {
+            const sectionEl = document.createElement("div");
+            sectionEl.classList.add("section");
+
+            const secHeading = document.createElement("h3");
+            secHeading.textContent = section;
+            sectionEl.appendChild(secHeading);
+
+            helpData[topic][section].forEach(item => {
+                const qEl = document.createElement("button");
+                qEl.textContent = item.question;
+                qEl.classList.add("question");
+
+                const aEl = document.createElement("div");
+                aEl.innerHTML = item.answer;
+                aEl.classList.add("answer");
+
+                qEl.addEventListener("click", () => {
+                    aEl.style.display = aEl.style.display === "none" ? "block" : "none";
+                });
+
+                sectionEl.appendChild(qEl);
+                sectionEl.appendChild(aEl);
+            });
+
+            topicEl.appendChild(sectionEl);
+        });
+
+        content.appendChild(topicEl);
+    }
+
+    // function searchHelp(term) {
+    //     searchResults.innerHTML = "";
+    //     if (!term) {
+    //         searchResults.style.display = "none";
+    //         return;
+    //     }
+
+    //     const matches = [];
+    //     Object.keys(helpData).forEach(topic => {
+    //         Object.keys(helpData[topic]).forEach(section => {
+    //             helpData[topic][section].forEach(item => {
+    //                 const text = (item.question + " " + item.answer).toLowerCase();
+    //                 if (text.includes(term)) {
+    //                     matches.push(item);
+    //                 }
+    //             });
+    //         });
+    //     });
+
+    //     matches.forEach(item => {
+    //         const div = document.createElement("div");
+    //         div.classList.add("search-item");
+    //         div.innerHTML = `<b>${item.question}</b><br><small>${item.answer}</small>`;
+    //         div.addEventListener("click", () => {
+    //             alert(`Answer: ${item.answer}`);
+    //         });
+    //         searchResults.appendChild(div);
+    //     });
+
+    //     searchResults.style.display = matches.length ? "block" : "none";
+    // }
+
+
+
+    function searchHelp(term) {
+        searchResults.innerHTML = "";
+        if (!term) {
+            searchResults.style.display = "none";
+            return;
+        }
+
+        const matches = [];
+        Object.keys(helpData).forEach(topic => {
+            Object.keys(helpData[topic]).forEach(section => {
+                helpData[topic][section].forEach(item => {
+                    const text = (item.question + " " + item.answer).toLowerCase();
+                    if (text.includes(term)) {
+                        matches.push({ topic, section, item });
+                    }
+                });
+            });
+        });
+
+        matches.forEach(match => {
+            const div = document.createElement("div");
+            div.classList.add("search-item");
+            div.innerHTML = `<b>${match.item.question}</b><br><small>${match.item.answer}</small>`;
+
+            div.addEventListener("click", () => {
+                // 1. Activate the correct sidebar button
+                document.querySelectorAll(".sidebar button").forEach(b => {
+                    b.classList.remove("active");
+                    if (b.textContent === match.topic) {
+                        b.classList.add("active");
+                    }
+                });
+
+                // 2. Render the topic content
+                renderTopic(match.topic);
+
+                // 3. Find the question and expand its answer
+                setTimeout(() => {
+                    const questions = document.querySelectorAll(".question");
+                    questions.forEach(q => {
+                        if (q.textContent === match.item.question) {
+                            q.scrollIntoView({ behavior: "smooth", block: "center" });
+                            q.click(); // auto-open the answer
+                        }
+                    });
+                }, 50);
+
+                // Hide search results after click
+                searchResults.style.display = "none";
+                searchInput.value = "";
+            });
+
+            searchResults.appendChild(div);
+        });
+
+        searchResults.style.display = matches.length ? "block" : "none";
+    }
+
+
+
+
+    searchInput.addEventListener("input", e => {
+        searchHelp(e.target.value.toLowerCase());
+    });
+
+    // Initialize
+    renderSidebar();
+    renderTopic(Object.keys(helpData)[0]); // show first topic by default
+</script>

@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <title>Help Center - Subtopic View</title>
+    <link rel="stylesheet" href="style6.css">
+
+</head>
+
+<body>
+    <div id="help-center">
+        <div class="search-wrapper">
+            <label for="search">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="21" viewBox="0 0 22 21"
+                    fill="none">
+                    <path
+                        d="M14.286 13.9352C16.3666 16.4718 17.7301 17.9156 20.8549 20.5041M8.8134 16.1249C4.57529 16.1249 1.14844 12.698 1.14844 8.45989C1.14844 4.22177 4.57529 0.794922 8.8134 0.794922C13.0515 0.794922 16.4784 4.22177 16.4784 8.45989C16.4784 12.698 13.0515 16.1249 8.8134 16.1249Z"
+                        stroke="#A6A6A6" stroke-width="0.8" stroke-linecap="round" />
+                </svg>
+            </label>
+            <input type="text" id="search" placeholder="Search our help center...">
+        </div>
+
+        <div id="search-results" class="search-results" aria-hidden="true"></div>
+        <div class="breadcrumb" id="breadcrumb">Help Center</div>
+
+        <div class="help-layout">
+            <div id="sidebar" class="sidebar"></div>
+
+
+            <!-- <div id="help-content" class="content"></div> -->
+            <div class="content-wrapper">
+                <div id="help-content" class="content"></div>
+                <div class="support-cta">
+                    Still can’t find what you are looking for?
+                    <a href="/support-ticket" class="cta-link">Submit a ticket!</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const helpData = {
+            "Product Inquiry": {
+                "Warranty and Repairs": [
+                    { "question": "How long is the warranty?", "answer": "All our gadgets come with a 1-year warranty from the brand unless stated otherwise." },
+                    { "question": "Can I still have my gadget repaired without the official receipt?", "answer": "Yes! Just send us your:<ul><li>Name</li><li>Address</li><li>Product model</li><li>Order Number</li><li>Date of purchase</li></ul>Even without the receipt, we can validate your request." },
+                ],
+                "Product Details": [
+                    { "question": "How can I see product specifications?", "answer": "Specifications are listed on the product detail page under <b>Description</b>." }
+                ],
+                "Test": [
+                    { "question": "How long is the warranty?", "answer": "All our gadgets come with a 1-year warranty from the brand unless stated otherwise." },
+                    { "question": "Can I still have my gadget repaired without the official receipt?", "answer": "Yes! Just send us your:<ul><li>Name</li><li>Address</li><li>Product model</li><li>Order Number</li><li>Date of purchase</li></ul>Even without the receipt, we can validate your request." }
+                ],
+                "Benz Pogi": [
+                    { "question": "How can I see product specifications?", "answer": "Specifications are listed on the product detail page under <b>Description</b>." }
+                ]
+            },
+            "Payment & Promos": {
+                "General": [
+                    { "question": "What payment methods do you accept?", "answer": "We accept credit cards, debit cards, and e-wallets." }
+                ]
+            }
+        };
+
+        const sidebar = document.getElementById('sidebar');
+        const content = document.getElementById('help-content');
+        const searchInput = document.getElementById('search');
+        const searchResults = document.getElementById('search-results');
+
+        // function renderSidebar() {
+        //     sidebar.innerHTML = '';
+        //     Object.keys(helpData).forEach(topic => {
+        //         const topicBtn = document.createElement('button');
+        //         topicBtn.className = 'topic-btn';
+        //         // topicBtn.textContent = topic + ' ▾';
+        //         topicBtn.innerHTML = topic + ' <span class="arrow">▾</span>';
+        //         sidebar.appendChild(topicBtn);
+
+        //         const subtopicDiv = document.createElement('div');
+        //         subtopicDiv.className = 'dropdown-content';
+
+        //         Object.keys(helpData[topic]).forEach(subtopic => {
+        //             const subBtn = document.createElement('button');
+        //             subBtn.className = 'subtopic-btn';
+        //             subBtn.textContent = subtopic;
+        //             subtopicDiv.appendChild(subBtn);
+
+        //             subBtn.addEventListener('click', () => {
+        //                 [...sidebar.querySelectorAll('.subtopic-btn')].forEach(b => b.classList.remove('active'));
+        //                 subBtn.classList.add('active');
+        //                 renderQuestions(subtopic, helpData[topic][subtopic]);
+        //             });
+        //         });
+
+        //         sidebar.appendChild(subtopicDiv);
+
+        //         topicBtn.addEventListener('click', () => {
+        //             subtopicDiv.classList.toggle('open');
+        //         });
+        //     });
+        // }
+
+        // function renderSidebar() {
+        //     sidebar.innerHTML = '';
+
+        //     Object.keys(helpData).forEach(topic => {
+        //         const wrapper = document.createElement('div'); // wrap topic + subtopics
+
+        //         const topicBtn = document.createElement('button');
+        //         topicBtn.className = 'topic-btn';
+        //         topicBtn.innerHTML = topic + ' <span class="arrow">▾</span>';
+        //         wrapper.appendChild(topicBtn);
+
+        //         const subtopicDiv = document.createElement('div');
+        //         subtopicDiv.className = 'dropdown-content';
+
+        //         const subtopics = Object.keys(helpData[topic]);
+        //         subtopics.forEach((subtopic, i) => {
+        //             const subBtn = document.createElement('button');
+        //             subBtn.className = 'subtopic-btn';
+        //             subBtn.textContent = subtopic;
+
+        //             // Make first subtopic active by default
+        //             if (i === 0) subBtn.classList.add('active');
+
+        //             subBtn.addEventListener('click', () => {
+        //                 // remove active from all subtopics in this dropdown
+        //                 [...subtopicDiv.querySelectorAll('.subtopic-btn')].forEach(b => b.classList.remove('active'));
+        //                 subBtn.classList.add('active');
+        //                 renderQuestions(subtopic, helpData[topic][subtopic]);
+        //             });
+
+        //             subtopicDiv.appendChild(subBtn);
+        //         });
+
+        //         wrapper.appendChild(subtopicDiv);
+        //         sidebar.appendChild(wrapper);
+
+        //         // Toggle dropdown
+        //         topicBtn.addEventListener('click', () => {
+        //             subtopicDiv.classList.toggle('open');
+        //         });
+
+        //         // Optionally, render questions for first subtopic by default
+        //         renderQuestions(subtopics[0], helpData[topic][subtopics[0]]);
+        //     });
+        // }
+
+
+        function renderSidebar() {
+            sidebar.innerHTML = '';
+            Object.keys(helpData).forEach(topic => {
+                const wrapperDiv = document.createElement('div');
+
+                const topicBtn = document.createElement('button');
+                topicBtn.className = 'topic-btn';
+                topicBtn.innerHTML = topic + ' <span class="arrow">▾</span>';
+                wrapperDiv.appendChild(topicBtn);
+
+                const subtopicDiv = document.createElement('div');
+                subtopicDiv.className = 'dropdown-content';
+
+                Object.keys(helpData[topic]).forEach((subtopic, index) => {
+                    const subBtn = document.createElement('button');
+                    subBtn.className = 'subtopic-btn';
+                    subBtn.textContent = subtopic;
+
+                    // Make first subtopic active by default
+                    if (index === 0) {
+                        subBtn.classList.add('active');
+                        renderQuestions(subtopic, helpData[topic][subtopic]);
+                    }
+
+                    subBtn.addEventListener('click', () => {
+                        [...sidebar.querySelectorAll('.subtopic-btn')].forEach(b => b.classList.remove('active'));
+                        subBtn.classList.add('active');
+                        renderQuestions(subtopic, helpData[topic][subtopic]);
+                    });
+
+                    subtopicDiv.appendChild(subBtn);
+                });
+
+                wrapperDiv.appendChild(subtopicDiv);
+                sidebar.appendChild(wrapperDiv);
+
+                topicBtn.addEventListener('click', () => {
+                    // On mobile only: close other dropdowns
+                    if (window.innerWidth <= 768) {
+                        const allDropdowns = sidebar.querySelectorAll('.dropdown-content');
+                        allDropdowns.forEach(d => {
+                            if (d !== subtopicDiv) d.classList.remove('open');
+                        });
+                    }
+
+                    subtopicDiv.classList.toggle('open');
+                });
+            });
+        }
+
+        function renderQuestions(subtopic, questions) {
+            content.innerHTML = '';
+            const subtopicHeading = document.createElement('h2');
+            subtopicHeading.textContent = subtopic;
+            subtopicHeading.className = 'subtopic-heading'; // <-- add a CSS class
+            content.appendChild(subtopicHeading);
+
+            questions.forEach(q => {
+                const id = makeId(q.question);
+                const container = document.createElement('div');
+                const qBtn = document.createElement('button');
+
+                container.className = 'qa-container';
+                container.id = id; // Set the ID for linking
+                qBtn.className = 'question-btn';
+                qBtn.textContent = q.question;
+
+
+                // qBtn.id = `q-${subtopic.replace(/\s+/g, '-')}-${q.question.replace(/\s+/g, '-')}`; // unique ID for each question to link from search
+                // qBtn.id = makeId(subtopic, q.question);
+
+                const ansDiv = document.createElement('div');
+                ansDiv.className = 'answer';
+                ansDiv.innerHTML = q.answer;
+
+                qBtn.addEventListener('click', () => {
+                    const isOpen = ansDiv.classList.contains('open');
+                    [...content.querySelectorAll('.answer')].forEach(a => a.classList.remove('open'));
+                    [...content.querySelectorAll('.question-btn')].forEach(b => b.classList.remove('active'));
+                    [...content.querySelectorAll('.qa-container')].forEach(c => c.classList.remove('active'));
+
+                    if (!isOpen) {
+                        ansDiv.classList.add('open');
+                        qBtn.classList.add('active');
+                        container.classList.add('active');
+                    }
+                });
+
+                container.appendChild(qBtn);
+                container.appendChild(ansDiv);
+                content.appendChild(container);
+            });
+        }
+
+
+
+        function searchHelp(query) {
+            searchResults.innerHTML = ''; // use the global searchResults (id="search-results")
+
+            if (!query) {
+                searchResults.style.display = 'none';
+                return;
+            }
+
+            const results = [];
+            for (let topic in helpData) {
+                for (let subtopic in helpData[topic]) {
+                    helpData[topic][subtopic].forEach(item => {
+                        const plainAnswer = item.answer.replace(/<[^>]+>/g, '');
+                        const lowerQuery = query.toLowerCase();
+                        if (
+                            item.question.toLowerCase().includes(lowerQuery) ||
+                            plainAnswer.toLowerCase().includes(lowerQuery) ||
+                            topic.toLowerCase().includes(lowerQuery) ||
+                            subtopic.toLowerCase().includes(lowerQuery)
+                        ) {
+                            results.push({ topic, subtopic, item, plainAnswer });
+                        }
+
+                    });
+                }
+            }
+
+            results.forEach(r => {
+                const div = document.createElement('div');
+                div.className = 'search-item';
+
+                // create snippet preview
+                const matchIndex = r.plainAnswer.toLowerCase().indexOf(query.toLowerCase());
+                let snippet = r.plainAnswer;
+                if (matchIndex > -1) {
+                    const start = Math.max(0, matchIndex - 40);
+                    const end = Math.min(r.plainAnswer.length, matchIndex + query.length + 40);
+                    snippet = (start > 0 ? '…' : '') + r.plainAnswer.slice(start, end) + (end < r.plainAnswer.length ? '…' : '');
+                }
+
+                //         div.innerHTML = `
+                //     <strong>${highlightMatch(r.item.question, query)}</strong>
+                //     <small>${r.topic} → ${r.subtopic}</small><br>
+                //     <span class="preview">${snippet}</span>
+                // `;
+                div.innerHTML = `
+    <strong>${highlightMatch(r.item.question, query)}</strong><br>
+    <small>${highlightMatch(r.topic, query)} → ${highlightMatch(r.subtopic, query)}</small><br>
+    <span class="preview">${highlightMatch(snippet, query)}</span>
+`;
+
+
+                div.addEventListener('click', () => {
+                    // 1. Expand the parent topic dropdown
+                    const topicBtns = [...document.querySelectorAll('.topic-btn')];
+                    const targetTopicBtn = topicBtns.find(b => b.textContent.includes(r.topic));
+                    if (targetTopicBtn) {
+                        // find the next sibling (dropdown-content)
+                        const subtopicDiv = targetTopicBtn.nextElementSibling;
+                        if (subtopicDiv) subtopicDiv.classList.add('open');
+                    }
+
+                    // 2. Simulate clicking the subtopic button so it highlights and renders questions
+                    const subtopicBtns = [...document.querySelectorAll('.subtopic-btn')];
+                    const subtopicBtn = subtopicBtns.find(b => b.textContent === r.subtopic);
+                    if (subtopicBtn) subtopicBtn.click();
+
+                    searchResults.style.display = 'none';
+                    searchInput.value = '';
+
+                    setTimeout(() => {
+                        const container = document.getElementById(makeId(r.item.question));
+                        if (container) {
+                            const qBtn = container.querySelector('.question-btn');
+                            if (qBtn) qBtn.click(); // triggers the existing click handler to open answer
+                            container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }, 50);
+                });
+
+                searchResults.appendChild(div);
+            });
+
+            searchResults.style.display = results.length ? 'block' : 'none';
+        }
+
+
+        function highlightMatch(text, query) {
+            const regex = new RegExp(`(${query})`, 'gi');
+            return text.replace(regex, '<mark>$1</mark>');
+        }
+
+        function makeId(question) {
+            return question
+                .replace(/\s+/g, '-')      // spaces → dashes
+                .replace(/[^\w-]/g, '');   // remove non-alphanumeric characters except dashes
+        }
+
+        function openQuestionFromHash() {
+            const hash = decodeURIComponent(window.location.hash.slice(1)); // remove '#'
+            if (!hash) return;
+
+            // First, find which subtopic contains this question
+            for (let topic in helpData) {
+                for (let subtopic in helpData[topic]) {
+                    const found = helpData[topic][subtopic].some(item => makeId(item.question) === hash);
+                    if (found) {
+                        // Expand the topic dropdown
+                        const topicBtn = [...document.querySelectorAll('.topic-btn')].find(b => b.textContent.includes(topic));
+                        if (topicBtn) {
+                            const subtopicDiv = topicBtn.nextElementSibling;
+                            if (subtopicDiv) subtopicDiv.classList.add('open');
+                        }
+
+                        // Render questions for the subtopic by simulating a click
+                        const subtopicBtn = [...document.querySelectorAll('.subtopic-btn')].find(b => b.textContent === subtopic);
+                        if (subtopicBtn) subtopicBtn.click();
+
+                        // Delay to ensure DOM is ready
+                        setTimeout(() => {
+                            const container = document.getElementById(hash);
+                            if (container) {
+                                const qBtn = container.querySelector('.question-btn');
+                                if (qBtn) qBtn.click();
+                                container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }
+                        }, 50);
+
+                        return; // Stop once found
+                    }
+                }
+            }
+        }
+
+
+
+        function init() {
+            renderSidebar();
+            searchInput.addEventListener('input', e => searchHelp(e.target.value.trim()));
+            document.addEventListener('click', ev => {
+                if (!searchResults.contains(ev.target) && ev.target !== searchInput) searchResults.style.display = 'none';
+            });
+        }
+
+        init();
+        openQuestionFromHash();
+        window.addEventListener('hashchange', openQuestionFromHash); 
+    </script>
+</body>
+
+</html>
+
+<div>
+    div.main-topic
+</div>

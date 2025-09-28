@@ -1,0 +1,890 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <title>Help Center - Subtopic View</title>
+    <link rel="stylesheet" href="style7.css">
+
+</head>
+
+<body>
+    <div id="help-center">
+        <div class="search-wrapper">
+            <label for="search">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="21" viewBox="0 0 22 21"
+                    fill="none">
+                    <path
+                        d="M14.286 13.9352C16.3666 16.4718 17.7301 17.9156 20.8549 20.5041M8.8134 16.1249C4.57529 16.1249 1.14844 12.698 1.14844 8.45989C1.14844 4.22177 4.57529 0.794922 8.8134 0.794922C13.0515 0.794922 16.4784 4.22177 16.4784 8.45989C16.4784 12.698 13.0515 16.1249 8.8134 16.1249Z"
+                        stroke="#A6A6A6" stroke-width="0.8" stroke-linecap="round" />
+                </svg>
+            </label>
+            <input type="text" id="search" placeholder="Search our help center...">
+        </div>
+
+        <div id="search-results" class="search-results" aria-hidden="true"></div>
+        <div class="breadcrumb" id="breadcrumb">Help Center</div>
+
+        <div class="help-layout">
+            <div id="sidebar" class="sidebar"></div>
+
+            <!-- Mobile layout containers -->
+            <div id="mobile-topics" class="mobile-topics"></div>
+            <div id="mobile-subtopics" class="mobile-subtopics"></div>
+
+            <!-- <div id="help-content" class="content"></div> -->
+            <div class="content-wrapper">
+                <div id="help-content" class="content"></div>
+                <div class="support-cta">
+                    Still can’t find what you are looking for?
+                    <a href="/support-ticket" class="cta-link">Submit a ticket!</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const helpData = {
+            "Product Inquiry": {
+                "Warranty and Repairs": [
+                    { "question": "How long is the warranty?", "answer": "All our gadgets come with a 1-year warranty from the brand unless stated otherwise." },
+                    { "question": "Can I still have my gadget repaired without the official receipt?", "answer": "Yes! Just send us your:<ul><li>Name</li><li>Address</li><li>Product model</li><li>Order Number</li><li>Date of purchase</li></ul>Even without the receipt, we can validate your request." },
+                ],
+                "Product Details": [
+                    { "question": "How can I see product specifications?", "answer": "Specifications are listed on the product detail page under <b>Description</b>." }
+                ],
+                "Test": [
+                    { "question": "How long is the warranty?", "answer": "All our gadgets come with a 1-year warranty from the brand unless stated otherwise." },
+                    { "question": "Can I still have my gadget repaired without the official receipt?", "answer": "Yes! Just send us your:<ul><li>Name</li><li>Address</li><li>Product model</li><li>Order Number</li><li>Date of purchase</li></ul>Even without the receipt, we can validate your request." }
+                ],
+                "Benz Pogi": [
+                    { "question": "How can I see product specifications?", "answer": "Specifications are listed on the product detail page under <b>Description</b>." }
+                ]
+            },
+            "Payment & Promos": {
+                "General": [
+                    { "question": "What payment methods do you accept?", "answer": "We accept credit cards, debit cards, and e-wallets." }
+                ]
+            }
+        };
+
+        const sidebar = document.getElementById('sidebar');
+        const content = document.getElementById('help-content');
+        const searchInput = document.getElementById('search');
+        const searchResults = document.getElementById('search-results');
+        const MOBILE_BREAKPOINT = 768;
+        let activeMobileTopic = null;
+        let activeMobileSubtopic = null;
+
+        // function renderSidebar() {
+        //     sidebar.innerHTML = '';
+        //     Object.keys(helpData).forEach(topic => {
+        //         const wrapperDiv = document.createElement('div');
+
+        //         const topicBtn = document.createElement('button');
+        //         topicBtn.className = 'topic-btn';
+        //         topicBtn.innerHTML = topic + ' <span class="arrow">▾</span>';
+        //         wrapperDiv.appendChild(topicBtn);
+
+        //         const subtopicDiv = document.createElement('div');
+        //         subtopicDiv.className = 'dropdown-content';
+
+        //         Object.keys(helpData[topic]).forEach((subtopic, index) => {
+        //             const subBtn = document.createElement('button');
+        //             subBtn.className = 'subtopic-btn';
+        //             subBtn.textContent = subtopic;
+
+        //             // Make first subtopic active by default
+        //             if (index === 0) {
+        //                 subBtn.classList.add('active');
+        //                 renderQuestions(subtopic, helpData[topic][subtopic]);
+        //             }
+
+        //             subBtn.addEventListener('click', () => {
+        //                 [...sidebar.querySelectorAll('.subtopic-btn')].forEach(b => b.classList.remove('active'));
+        //                 subBtn.classList.add('active');
+        //                 renderQuestions(subtopic, helpData[topic][subtopic]);
+        //             });
+
+        //             subtopicDiv.appendChild(subBtn);
+        //         });
+
+        //         wrapperDiv.appendChild(subtopicDiv);
+        //         sidebar.appendChild(wrapperDiv);
+
+        //         topicBtn.addEventListener('click', () => {
+        //             // On mobile only: close other dropdowns
+        //             if (window.innerWidth <= 768) {
+        //                 const allDropdowns = sidebar.querySelectorAll('.dropdown-content');
+        //                 allDropdowns.forEach(d => {
+        //                     if (d !== subtopicDiv) d.classList.remove('open');
+        //                 });
+        //             }
+
+        //             subtopicDiv.classList.toggle('open');
+        //         });
+        //     });
+        // }
+
+        function renderDesktopSidebar() {
+            sidebar.innerHTML = '';
+
+            Object.keys(helpData).forEach(topic => {
+                const wrapperDiv = document.createElement('div');
+
+                // Main topic button
+                const topicBtn = document.createElement('button');
+                topicBtn.className = 'topic-btn';
+                topicBtn.innerHTML = topic + ' <span class="arrow">▾</span>';
+                wrapperDiv.appendChild(topicBtn);
+
+                // Subtopic container
+                const subtopicDiv = document.createElement('div');
+                subtopicDiv.className = 'dropdown-content';
+
+                Object.keys(helpData[topic]).forEach((subtopic, index) => {
+                    const subBtn = document.createElement('button');
+                    subBtn.className = 'subtopic-btn';
+                    subBtn.textContent = subtopic;
+
+                    // Make the first subtopic active by default
+                    // if (index === 0) {
+                    //     subBtn.classList.add('active');
+                    //     renderQuestions(subtopic, helpData[topic][subtopic]);
+                    // }
+
+                    subBtn.addEventListener('click', () => {
+                        [...sidebar.querySelectorAll('.subtopic-btn')].forEach(b => b.classList.remove('active'));
+                        subBtn.classList.add('active');
+                        renderQuestions(subtopic, helpData[topic][subtopic]);
+                    });
+
+                    subtopicDiv.appendChild(subBtn);
+                });
+
+                wrapperDiv.appendChild(subtopicDiv);
+                sidebar.appendChild(wrapperDiv);
+
+                // Toggle dropdown on topic click
+                topicBtn.addEventListener('click', () => {
+                    subtopicDiv.classList.toggle('open');
+                });
+            });
+        }
+
+        // function renderMobileSidebar() {
+        //     const topicBar = document.getElementById('mobile-topics');
+        //     const subtopicList = document.getElementById('mobile-subtopics');
+
+        //     topicBar.innerHTML = '';
+        //     subtopicList.innerHTML = '';
+
+        //     Object.keys(helpData).forEach((topic, tIndex) => {
+        //         const topicBtn = document.createElement('button');
+        //         topicBtn.className = 'topic-btn';
+        //         topicBtn.textContent = topic;
+
+        //         topicBtn.addEventListener('click', () => {
+        //             [...topicBar.querySelectorAll('.topic-btn')].forEach(b => b.classList.remove('active'));
+        //             topicBtn.classList.add('active');
+        //             renderMobileSubtopics(topic);
+        //         });
+
+        //         topicBar.appendChild(topicBtn);
+
+        //         if (tIndex === 0) {
+        //             topicBtn.classList.add('active');
+        //             renderMobileSubtopics(topic);
+        //         }
+        //     });
+
+        //     function renderMobileSubtopics(topic) {
+        //         subtopicList.innerHTML = '';
+        //         Object.keys(helpData[topic]).forEach((sub, i) => {
+        //             const subBtn = document.createElement('button');
+        //             subBtn.className = 'subtopic-btn';
+        //             subBtn.textContent = sub;
+
+        //             subBtn.addEventListener('click', () => {
+        //                 [...subtopicList.querySelectorAll('.subtopic-btn')].forEach(b => b.classList.remove('active'));
+        //                 subBtn.classList.add('active');
+        //                 renderQuestions(sub, helpData[topic][sub]);
+        //             });
+
+        //             subtopicList.appendChild(subBtn);
+
+        //             if (i === 0) {
+        //                 subBtn.classList.add('active');
+        //                 renderQuestions(sub, helpData[topic][sub]);
+        //             }
+        //         });
+        //     }
+        // }
+
+
+        // function renderMobileSidebar() {
+        //     const mobileTopics = document.getElementById("mobile-topics");
+        //     const mobileSubtopics = document.getElementById("mobile-subtopics");
+
+        //     mobileTopics.innerHTML = "";
+        //     mobileSubtopics.innerHTML = "";
+
+        //     // Loop through main topics
+        //     Object.keys(helpData).forEach(topic => {
+        //         const topicBtn = document.createElement("button");
+        //         topicBtn.textContent = topic;
+        //         topicBtn.className = "main-topic-btn";
+
+        //         topicBtn.addEventListener("click", () => {
+        //             mobileSubtopics.innerHTML = "";
+
+        //             // Loop through subtopics for this topic
+        //             Object.keys(helpData[topic]).forEach(sub => {
+        //                 const subDiv = document.createElement("div");
+        //                 subDiv.className = "mobile-subtopic";
+
+        //                 const subBtn = document.createElement("button");
+        //                 subBtn.textContent = sub;
+        //                 subBtn.className = "subtopic-btn";
+
+        //                 const qContainer = document.createElement("div");
+        //                 qContainer.className = "questions";
+        //                 qContainer.style.display = "none";
+
+        //                 helpData[topic][sub].forEach(q => {
+        //                     const qBtn = document.createElement("button");
+        //                     qBtn.textContent = q.question;
+        //                     qBtn.className = "question-btn";
+        //                     qBtn.addEventListener("click", () => showAnswer(q));
+        //                     qContainer.appendChild(qBtn);
+        //                 });
+
+        //                 subBtn.addEventListener("click", () => {
+        //                     qContainer.style.display =
+        //                         qContainer.style.display === "none" ? "block" : "none";
+        //                 });
+
+        //                 subDiv.appendChild(subBtn);
+        //                 subDiv.appendChild(qContainer);
+        //                 mobileSubtopics.appendChild(subDiv);
+        //             });
+        //         });
+
+        //         mobileTopics.appendChild(topicBtn);
+        //     });
+        // }
+
+        function renderMobileSidebar() {
+            const mobileTopics = document.getElementById("mobile-topics");
+            const mobileSubtopics = document.getElementById("mobile-subtopics");
+
+            mobileTopics.innerHTML = "";
+            mobileSubtopics.innerHTML = "";
+
+            // Loop through main topics
+            Object.keys(helpData).forEach(topic => {
+                const topicBtn = document.createElement("button");
+                topicBtn.textContent = topic;
+                topicBtn.className = "main-topic-btn";
+
+                topicBtn.addEventListener("click", () => {
+                    activeMobileTopic = topic; // remember clicked main topic
+                    activeMobileSubtopic = null; // reset subtopic
+
+                    // Update active class for main topics
+                    document.querySelectorAll(".main-topic-btn").forEach(btn => btn.classList.remove("active"));
+                    topicBtn.classList.add("active");
+
+                    // Remove active class from all main topic buttons
+                    // document.querySelectorAll(".main-topic-btn").forEach(btn => btn.classList.remove("active"));
+
+                    // Add active class to the clicked button
+                    topicBtn.classList.add("active");
+
+                    mobileSubtopics.innerHTML = "";
+
+                    // Loop through subtopics for this topic
+                    Object.keys(helpData[topic]).forEach(sub => {
+                        const subDiv = document.createElement("div");
+                        subDiv.className = "mobile-subtopic";
+
+                        const subBtn = document.createElement("button");
+                        subBtn.textContent = sub;
+                        subBtn.className = "subtopic-btn";
+
+                        const qContainer = document.createElement("div");
+                        qContainer.className = "questions";
+                        // qContainer.style.display = "none";
+                        // qContainer.classList.toggle("open");
+
+                        helpData[topic][sub].forEach(q => {
+                            const qBtn = document.createElement("button");
+                            qBtn.textContent = q.question;
+                            qBtn.className = "question-btn";
+                            // qBtn.addEventListener("click", () => showAnswer(q));
+                            qBtn.addEventListener("click", () => {
+                                showMobileAnswer(topic, sub, q);
+                            });
+                            qContainer.appendChild(qBtn);
+                        });
+
+                        // subBtn.addEventListener("click", () => {
+                        //     // close all other dropdowns
+                        //     document
+                        //         .querySelectorAll("#mobile-subtopics .questions.open")
+                        //         .forEach(el => {
+                        //             // if (el !== qContainer) el.style.display = "none";
+                        //             if (el !== qContainer) el.classList.remove("open");
+                        //         });
+
+                        //     // toggle this one
+                        //     qContainer.classList.toggle("open");
+
+                        //     // // toggle current
+                        //     // qContainer.style.display =
+                        //     //     qContainer.style.display === "none" ? "block" : "none";
+                        // });
+
+
+                        // 
+
+
+                        // subBtn.addEventListener("click", () => {
+                        //     // close others
+                        //     document.querySelectorAll("#mobile-subtopics .questions.open").forEach(el => {
+                        //         if (el !== qContainer) el.classList.remove("open");
+                        //     });
+
+                        //     // toggle this one
+                        //     qContainer.classList.toggle("open");
+                        // });
+
+
+                        // subBtn.addEventListener("click", () => {
+                        //     if (!qContainer.classList.contains("open")) {
+                        //         // We're opening a new dropdown → close others instantly
+                        //         document.querySelectorAll("#mobile-subtopics .questions.open").forEach(el => {
+                        //             if (el !== qContainer) {
+                        //                 el.style.transition = "none";   // disable animation
+                        //                 el.classList.remove("open");
+
+                        //                 // restore transition so next time it animates again
+                        //                 requestAnimationFrame(() => {
+                        //                     el.style.transition = "";
+                        //                 });
+                        //             }
+                        //         });
+                        //     }
+
+                        //     // Toggle this one normally (it will animate on open/close)
+                        //     qContainer.classList.toggle("open");
+                        // });
+
+                        subBtn.addEventListener("click", () => {
+                            if (!qContainer.classList.contains("open")) {
+                                document.querySelectorAll("#mobile-subtopics .questions.open").forEach(el => {
+                                    if (el !== qContainer) {
+                                        el.classList.add("closing");   // disable transition
+                                        el.classList.remove("open");   // instantly close
+                                        setTimeout(() => el.classList.remove("closing"), 20); // restore for next open
+                                    }
+                                });
+                            }
+                            qContainer.classList.toggle("open");
+
+                        });
+
+                        subDiv.appendChild(subBtn);
+                        subDiv.appendChild(qContainer);
+                        mobileSubtopics.appendChild(subDiv);
+                    });
+                });
+
+                mobileTopics.appendChild(topicBtn);
+            });
+        }
+
+
+
+        // function renderMobileSubtopics(topic) {
+        //     const mobileSubtopics = document.getElementById("mobile-subtopics");
+        //     mobileSubtopics.innerHTML = "";
+
+        //     // update breadcrumb to show topic (mobile flows)
+        //     const breadcrumb = document.getElementById("breadcrumb");
+        //     if (breadcrumb) breadcrumb.textContent = `Help Center > ${topic}`;
+
+        //     // ensure the correct topic chip is active
+        //     const topicBtns = document.querySelectorAll("#mobile-topics .main-topic-btn");
+        //     topicBtns.forEach(b => b.classList.toggle("active", b.dataset.topic === topic));
+
+        //     // build subtopic list as accordion
+        //     Object.keys(helpData[topic]).forEach((sub, sIdx) => {
+        //         const subDiv = document.createElement("div");
+        //         subDiv.className = "mobile-subtopic";
+
+        //         const subBtn = document.createElement("button");
+        //         subBtn.className = "subtopic-btn";
+        //         subBtn.textContent = sub;
+
+        //         const qContainer = document.createElement("div");
+        //         qContainer.className = "questions";
+        //         // qContainer.style.display = "none";
+
+        //         // questions (click will open full-screen answer view)
+        //         helpData[topic][sub].forEach(q => {
+        //             const qBtn = document.createElement("button");
+        //             qBtn.className = "question-btn";
+        //             qBtn.textContent = q.question;
+
+        //             // on mobile: open the full answer screen (breadcrumb + back)
+        //             qBtn.addEventListener("click", () => {
+        //                 showMobileAnswer(topic, sub, q);
+        //             });
+
+        //             qContainer.appendChild(qBtn);
+        //         });
+
+        //         subBtn.addEventListener("click", () => {
+        //             [...mobileSubtopics.querySelectorAll(".questions.open")].forEach(el => {
+        //                 if (el !== qContainer) el.classList.remove("open");
+        //             });
+        //             qContainer.classList.toggle("open");
+        //         });
+
+        //         subDiv.appendChild(subBtn);
+        //         subDiv.appendChild(qContainer);
+        //         mobileSubtopics.appendChild(subDiv);
+
+        //     });
+        // }
+
+        // function renderMobileSubtopics(topic) {
+        //     const mobileSubtopics = document.getElementById("mobile-subtopics");
+        //     mobileSubtopics.innerHTML = "";
+
+        //     // Breadcrumb
+        //     const breadcrumb = document.getElementById("breadcrumb");
+        //     breadcrumb.textContent = `Help Center > ${topic}`;
+
+        //     // Highlight active main topic
+        //     document.querySelectorAll(".main-topic-btn").forEach(btn => {
+        //         btn.classList.toggle("active", btn.textContent === topic);
+        //     });
+
+        //     Object.keys(helpData[topic]).forEach(sub => {
+        //         const subDiv = document.createElement("div");
+        //         subDiv.className = "mobile-subtopic";
+
+        //         const subBtn = document.createElement("button");
+        //         subBtn.className = "subtopic-btn";
+        //         subBtn.textContent = sub;
+
+        //         const qContainer = document.createElement("div");
+        //         qContainer.className = "questions";
+
+        //         // Build questions
+        //         helpData[topic][sub].forEach(q => {
+        //             const qBtn = document.createElement("button");
+        //             qBtn.className = "question-btn";
+        //             qBtn.textContent = q.question;
+
+        //             qBtn.addEventListener("click", () => {
+        //                 activeMobileSubtopic = sub; // remember which subtopic we're in
+        //                 showMobileAnswer(topic, sub, q);
+        //             });
+
+        //             qContainer.appendChild(qBtn);
+        //         });
+
+        //         subBtn.addEventListener("click", () => {
+        //             // close others
+        //             document.querySelectorAll("#mobile-subtopics .questions.open").forEach(el => {
+        //                 if (el !== qContainer) el.classList.remove("open");
+        //             });
+        //             qContainer.classList.toggle("open");
+        //             activeMobileSubtopic = qContainer.classList.contains("open") ? sub : null;
+        //         });
+
+        //         // Restore active subtopic if it matches
+        //         if (activeMobileSubtopic === sub) {
+        //             qContainer.classList.add("open");
+        //         }
+
+        //         subDiv.appendChild(subBtn);
+        //         subDiv.appendChild(qContainer);
+        //         mobileSubtopics.appendChild(subDiv);
+        //     });
+        // }
+
+
+        function renderMobileSubtopics(topic) {
+            const mobileSubtopics = document.getElementById("mobile-subtopics");
+            mobileSubtopics.innerHTML = "";
+
+            // Update breadcrumb
+            document.getElementById("breadcrumb").textContent = `Help Center > ${topic}`;
+
+            // Highlight active main topic
+            document.querySelectorAll(".main-topic-btn").forEach(btn => {
+                btn.classList.toggle("active", btn.textContent === topic);
+            });
+
+            // Loop through subtopics
+            Object.keys(helpData[topic]).forEach(sub => {
+                const subDiv = document.createElement("div");
+                subDiv.className = "mobile-subtopic";
+
+                const subBtn = document.createElement("button");
+                subBtn.className = "subtopic-btn";
+                subBtn.textContent = sub;
+
+                const qContainer = document.createElement("div");
+                qContainer.className = "questions";
+
+                // Build questions
+                helpData[topic][sub].forEach(q => {
+                    const qBtn = document.createElement("button");
+                    qBtn.className = "question-btn";
+                    qBtn.textContent = q.question;
+                    qBtn.addEventListener("click", () => {
+                        activeMobileSubtopic = sub;
+                        showMobileAnswer(topic, sub, q);
+                    });
+                    qContainer.appendChild(qBtn);
+                });
+
+                // Restore previously active subtopic dropdown
+                if (activeMobileSubtopic === sub) qContainer.classList.add("open");
+
+                // Subtopic click → toggle open, close others
+                subBtn.addEventListener("click", () => {
+                    document.querySelectorAll("#mobile-subtopics .questions.open").forEach(el => {
+                        if (el !== qContainer) el.classList.remove("open");
+                    });
+                    qContainer.classList.toggle("open");
+                    activeMobileSubtopic = qContainer.classList.contains("open") ? sub : null;
+                });
+
+                subDiv.appendChild(subBtn);
+                subDiv.appendChild(qContainer);
+                mobileSubtopics.appendChild(subDiv);
+            });
+        }
+
+
+        function showMobileAnswer(topic, subtopic, questionObj) {
+            const mobileSubtopics = document.getElementById("mobile-subtopics");
+            mobileSubtopics.innerHTML = ""; // Clear subtopics view
+
+            // Breadcrumb update
+            const breadcrumb = document.getElementById("breadcrumb");
+            breadcrumb.textContent = `Help Center > ${topic} > ${subtopic}`; //> ${questionObj.question}
+
+            // Back button
+            const backBtn = document.createElement("button");
+            backBtn.textContent = "← Back";
+            backBtn.className = "back-btn";
+            backBtn.addEventListener("click", () => {
+                breadcrumb.textContent = `Help Center > ${topic} > ${subtopic}`;
+                // renderMobileSubtopics(topic); // Rebuild subtopics/questions view
+                renderMobileSubtopics(activeMobileTopic);
+
+            });
+
+            // Answer container
+            const qTitle = document.createElement("h2");
+            qTitle.textContent = questionObj.question;
+
+            const ansDiv = document.createElement("div");
+            ansDiv.className = "answer";
+            ansDiv.innerHTML = questionObj.answer;
+
+            mobileSubtopics.appendChild(backBtn);
+            mobileSubtopics.appendChild(qTitle);
+            mobileSubtopics.appendChild(ansDiv);
+        }
+
+
+        function renderQuestions(subtopic, questions) {
+            content.innerHTML = '';
+            const subtopicHeading = document.createElement('h2');
+            subtopicHeading.textContent = subtopic;
+            subtopicHeading.className = 'subtopic-heading'; // <-- add a CSS class
+            content.appendChild(subtopicHeading);
+
+            questions.forEach(q => {
+                const id = makeId(q.question);
+                const container = document.createElement('div');
+                const qBtn = document.createElement('button');
+
+                container.className = 'qa-container';
+                container.id = id; // Set the ID for linking
+                qBtn.className = 'question-btn';
+                qBtn.textContent = q.question;
+
+
+                // qBtn.id = `q-${subtopic.replace(/\s+/g, '-')}-${q.question.replace(/\s+/g, '-')}`; // unique ID for each question to link from search
+                // qBtn.id = makeId(subtopic, q.question);
+
+                const ansDiv = document.createElement('div');
+                ansDiv.className = 'answer';
+                ansDiv.innerHTML = q.answer;
+
+                qBtn.addEventListener('click', () => {
+                    const isOpen = ansDiv.classList.contains('open');
+                    [...content.querySelectorAll('.answer')].forEach(a => a.classList.remove('open'));
+                    [...content.querySelectorAll('.question-btn')].forEach(b => b.classList.remove('active'));
+                    [...content.querySelectorAll('.qa-container')].forEach(c => c.classList.remove('active'));
+
+                    if (!isOpen) {
+                        ansDiv.classList.add('open');
+                        qBtn.classList.add('active');
+                        container.classList.add('active');
+                    }
+                });
+
+                container.appendChild(qBtn);
+                container.appendChild(ansDiv);
+                content.appendChild(container);
+            });
+        }
+
+
+
+        function searchHelp(query) {
+            searchResults.innerHTML = ''; // use the global searchResults (id="search-results")
+
+            if (!query) {
+                searchResults.style.display = 'none';
+                return;
+            }
+
+            const results = [];
+            for (let topic in helpData) {
+                for (let subtopic in helpData[topic]) {
+                    helpData[topic][subtopic].forEach(item => {
+                        const plainAnswer = item.answer.replace(/<[^>]+>/g, '');
+                        const lowerQuery = query.toLowerCase();
+                        if (
+                            item.question.toLowerCase().includes(lowerQuery) ||
+                            plainAnswer.toLowerCase().includes(lowerQuery) ||
+                            topic.toLowerCase().includes(lowerQuery) ||
+                            subtopic.toLowerCase().includes(lowerQuery)
+                        ) {
+                            results.push({ topic, subtopic, item, plainAnswer });
+                        }
+
+                    });
+                }
+            }
+
+            results.forEach(r => {
+                const div = document.createElement('div');
+                div.className = 'search-item';
+
+                // create snippet preview
+                const matchIndex = r.plainAnswer.toLowerCase().indexOf(query.toLowerCase());
+                let snippet = r.plainAnswer;
+                if (matchIndex > -1) {
+                    const start = Math.max(0, matchIndex - 40);
+                    const end = Math.min(r.plainAnswer.length, matchIndex + query.length + 40);
+                    snippet = (start > 0 ? '…' : '') + r.plainAnswer.slice(start, end) + (end < r.plainAnswer.length ? '…' : '');
+                }
+
+                //         div.innerHTML = `
+                //     <strong>${highlightMatch(r.item.question, query)}</strong>
+                //     <small>${r.topic} → ${r.subtopic}</small><br>
+                //     <span class="preview">${snippet}</span>
+                // `;
+                div.innerHTML = `
+    <strong>${highlightMatch(r.item.question, query)}</strong><br>
+    <small>${highlightMatch(r.topic, query)} → ${highlightMatch(r.subtopic, query)}</small><br>
+    <span class="preview">${highlightMatch(snippet, query)}</span>
+`;
+
+
+                // div.addEventListener('click', () => {
+                //     // 1. Expand the parent topic dropdown
+                //     const topicBtns = [...document.querySelectorAll('.topic-btn')];
+                //     const targetTopicBtn = topicBtns.find(b => b.textContent.includes(r.topic));
+                //     if (targetTopicBtn) {
+                //         // find the next sibling (dropdown-content)
+                //         const subtopicDiv = targetTopicBtn.nextElementSibling;
+                //         if (subtopicDiv) subtopicDiv.classList.add('open');
+                //     }
+
+                //     // 2. Simulate clicking the subtopic button so it highlights and renders questions
+                //     const subtopicBtns = [...document.querySelectorAll('.subtopic-btn')];
+                //     const subtopicBtn = subtopicBtns.find(b => b.textContent === r.subtopic);
+                //     if (subtopicBtn) subtopicBtn.click();
+
+                //     searchResults.style.display = 'none';
+                //     searchInput.value = '';
+
+                //     setTimeout(() => {
+                //         const container = document.getElementById(makeId(r.item.question));
+                //         if (container) {
+                //             const qBtn = container.querySelector('.question-btn');
+                //             if (qBtn) qBtn.click(); // triggers the existing click handler to open answer
+                //             container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                //         }
+                //     }, 50);
+                // });
+                div.addEventListener('click', () => {
+                    if (window.innerWidth <= MOBILE_BREAKPOINT) {
+                        // Mobile: show full-screen answer
+                        showMobileAnswer(r.topic, r.subtopic, r.item);
+                    } else {
+                        // Desktop: expand dropdowns and simulate clicks
+                        const topicBtns = [...document.querySelectorAll('.topic-btn')];
+                        const targetTopicBtn = topicBtns.find(b => b.textContent.includes(r.topic));
+                        if (targetTopicBtn) {
+                            const subtopicDiv = targetTopicBtn.nextElementSibling;
+                            if (subtopicDiv) subtopicDiv.classList.add('open');
+                        }
+
+                        const subtopicBtns = [...document.querySelectorAll('.subtopic-btn')];
+                        const subtopicBtn = subtopicBtns.find(b => b.textContent === r.subtopic);
+                        if (subtopicBtn) subtopicBtn.click();
+
+                        setTimeout(() => {
+                            const container = document.getElementById(makeId(r.item.question));
+                            if (container) {
+                                const qBtn = container.querySelector('.question-btn');
+                                if (qBtn) qBtn.click();
+                                container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }
+                        }, 50);
+                    }
+
+                    // Hide search results after click
+                    searchResults.style.display = 'none';
+                    searchInput.value = '';
+                });
+
+
+                searchResults.appendChild(div);
+            });
+
+            searchResults.style.display = results.length ? 'block' : 'none';
+        }
+
+
+        function highlightMatch(text, query) {
+            const regex = new RegExp(`(${query})`, 'gi');
+            return text.replace(regex, '<mark>$1</mark>');
+        }
+
+        function makeId(question) {
+            return question
+                .replace(/\s+/g, '-')      // spaces → dashes
+                .replace(/[^\w-]/g, '');   // remove non-alphanumeric characters except dashes
+        }
+
+        function openQuestionFromHash() {
+            const hash = decodeURIComponent(window.location.hash.slice(1)); // remove '#'
+            if (!hash) return;
+
+            // First, find which subtopic contains this question
+            for (let topic in helpData) {
+                for (let subtopic in helpData[topic]) {
+                    const found = helpData[topic][subtopic].some(item => makeId(item.question) === hash);
+                    if (found) {
+                        // Expand the topic dropdown
+                        const topicBtn = [...document.querySelectorAll('.topic-btn')].find(b => b.textContent.includes(topic));
+                        if (topicBtn) {
+                            const subtopicDiv = topicBtn.nextElementSibling;
+                            if (subtopicDiv) subtopicDiv.classList.add('open');
+                        }
+
+                        // Render questions for the subtopic by simulating a click
+                        const subtopicBtn = [...document.querySelectorAll('.subtopic-btn')].find(b => b.textContent === subtopic);
+                        if (subtopicBtn) subtopicBtn.click();
+
+                        // Delay to ensure DOM is ready
+                        setTimeout(() => {
+                            const container = document.getElementById(hash);
+                            if (container) {
+                                const qBtn = container.querySelector('.question-btn');
+                                if (qBtn) qBtn.click();
+                                container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }
+                        }, 50);
+
+                        return; // Stop once found
+                    }
+                }
+            }
+        }
+
+
+
+        // function init() {
+        //     if (window.innerWidth > 768) {
+        //         renderDesktopSidebar();
+        //     } else {
+        //         renderMobileSidebar();
+        //     }
+
+        // }
+        let currentLayout = null; // "desktop" or "mobile"
+
+        function init() {
+            const isDesktop = window.innerWidth > MOBILE_BREAKPOINT;
+
+            if (isDesktop && currentLayout !== "desktop") {
+                sidebar.innerHTML = ""; // clear old stuff
+                document.getElementById("mobile-topics").innerHTML = "";
+                document.getElementById("mobile-subtopics").innerHTML = "";
+
+                renderDesktopSidebar();
+                currentLayout = "desktop";
+            }
+            else if (!isDesktop && currentLayout !== "mobile") {
+                sidebar.innerHTML = ""; // clear old stuff
+                document.getElementById("mobile-topics").innerHTML = "";
+                document.getElementById("mobile-subtopics").innerHTML = "";
+
+                renderMobileSidebar();
+                currentLayout = "mobile";
+            }
+            const searchInput = document.getElementById("search");
+            const searchResults = document.getElementById("search-results");
+
+            if (searchInput && searchResults) {
+                searchInput.addEventListener("input", e => {
+                    searchHelp(e.target.value.trim());
+                });
+
+                document.addEventListener("click", ev => {
+                    if (!searchResults.contains(ev.target) && ev.target !== searchInput) {
+                        searchResults.style.display = "none";
+                    }
+                });
+            }
+        }
+
+        // Run on page load
+        window.addEventListener("DOMContentLoaded", init);
+
+        // Run when resizing (but only if layout actually changes)
+        window.addEventListener("resize", init);
+
+
+        init();
+        openQuestionFromHash();
+        window.addEventListener('hashchange', openQuestionFromHash);
+        window.addEventListener("resize", init);
+
+    </script>
+</body>
+
+</html>

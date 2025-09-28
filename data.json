@@ -1,0 +1,28 @@
+{
+  "Product Inquiry": {
+    "Stock and Inventory": [
+      {
+        "question": "How can I know the status of my order?",
+        "answer": "Log in to your account and check under <b>My Orders</b>."
+      },
+      {
+        "question": "Where can I find my order tracking number?",
+        "answer": "You will receive the tracking number in your email once the order is shipped."
+      }
+    ],
+    "Product Details": [
+      {
+        "question": "How can I see product specifications?",
+        "answer": "Specifications are listed on the product detail page under <b>Description</b>."
+      }
+    ]
+  },
+  "Payment & Promos": {
+    "General": [
+      {
+        "question": "What payment methods do you accept?",
+        "answer": "We accept credit cards, debit cards, and e-wallets."
+      }
+    ]
+  }
+}
