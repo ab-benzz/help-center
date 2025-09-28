@@ -635,30 +635,74 @@
             });
         }
 
+        // function showMobileAnswer(topic, subtopic, questionObj) {
+        //     const mobileSubtopics = document.getElementById("mobile-subtopics");
+        //     mobileSubtopics.innerHTML = ""; // Clear subtopics view
+
+        //     // Breadcrumb update
+        //     const breadcrumb = document.getElementById("breadcrumb");
+        //     breadcrumb.textContent = `Help Center > ${topic} > ${subtopic}`; //> ${questionObj.question}
+
+        //     // Back button
+        //     const backBtn = document.createElement("button");
+        //     backBtn.textContent = "← Back";
+        //     backBtn.className = "back-btn";
+        //     backBtn.addEventListener("click", () => {
+        //         breadcrumb.textContent = `Help Center > ${topic} > ${subtopic}`;
+
+        //         // Set the active subtopic before rendering
+        //         activeMobileSubtopic = subtopic;
+
+        //         // renderMobileSubtopics(topic); // Rebuild subtopics/questions view
+        //         renderMobileSubtopics(activeMobileTopic);
+
+        //     });
+
+        //     // Answer container
+        //     const qTitle = document.createElement("h2");
+        //     qTitle.textContent = questionObj.question;
+
+        //     const ansDiv = document.createElement("div");
+        //     ansDiv.className = "answer";
+        //     ansDiv.innerHTML = questionObj.answer;
+
+        //     mobileSubtopics.appendChild(backBtn);
+        //     mobileSubtopics.appendChild(qTitle);
+        //     mobileSubtopics.appendChild(ansDiv);
+        // }
+
         function showMobileAnswer(topic, subtopic, questionObj) {
             const mobileSubtopics = document.getElementById("mobile-subtopics");
             mobileSubtopics.innerHTML = ""; // Clear subtopics view
 
-            // Breadcrumb update
+            activeMobileTopic = topic;
+            activeMobileSubtopic = subtopic;
+
+            // Breadcrumb
             const breadcrumb = document.getElementById("breadcrumb");
-            breadcrumb.textContent = `Help Center > ${topic} > ${subtopic}`; //> ${questionObj.question}
+            breadcrumb.textContent = `Help Center > ${topic} > ${subtopic}`;
 
             // Back button
             const backBtn = document.createElement("button");
             backBtn.textContent = "← Back";
             backBtn.className = "back-btn";
             backBtn.addEventListener("click", () => {
-                breadcrumb.textContent = `Help Center > ${topic} > ${subtopic}`;
-
-                // Set the active subtopic before rendering
-                activeMobileSubtopic = subtopic;
-
-                // renderMobileSubtopics(topic); // Rebuild subtopics/questions view
+                // Restore main topic and subtopic
                 renderMobileSubtopics(activeMobileTopic);
 
+                // Ensure the previous subtopic dropdown is open
+                const subBtn = [...document.querySelectorAll("#mobile-subtopics .subtopic-btn")]
+                    .find(b => b.textContent === activeMobileSubtopic);
+                if (subBtn) {
+                    const qContainer = subBtn.nextElementSibling;
+                    qContainer.classList.add("open");
+                }
+
+                // Update breadcrumb
+                document.getElementById("breadcrumb").textContent = `Help Center > ${activeMobileTopic}`;
             });
 
-            // Answer container
+            // Question title & answer
             const qTitle = document.createElement("h2");
             qTitle.textContent = questionObj.question;
 
@@ -670,7 +714,6 @@
             mobileSubtopics.appendChild(qTitle);
             mobileSubtopics.appendChild(ansDiv);
         }
-
 
         function renderQuestions(subtopic, questions) {
             content.innerHTML = '';
@@ -770,36 +813,17 @@
 `;
 
 
-                // div.addEventListener('click', () => {
-                //     // 1. Expand the parent topic dropdown
-                //     const topicBtns = [...document.querySelectorAll('.topic-btn')];
-                //     const targetTopicBtn = topicBtns.find(b => b.textContent.includes(r.topic));
-                //     if (targetTopicBtn) {
-                //         // find the next sibling (dropdown-content)
-                //         const subtopicDiv = targetTopicBtn.nextElementSibling;
-                //         if (subtopicDiv) subtopicDiv.classList.add('open');
-                //     }
-
-                //     // 2. Simulate clicking the subtopic button so it highlights and renders questions
-                //     const subtopicBtns = [...document.querySelectorAll('.subtopic-btn')];
-                //     const subtopicBtn = subtopicBtns.find(b => b.textContent === r.subtopic);
-                //     if (subtopicBtn) subtopicBtn.click();
-
-                //     searchResults.style.display = 'none';
-                //     searchInput.value = '';
-
-                //     setTimeout(() => {
-                //         const container = document.getElementById(makeId(r.item.question));
-                //         if (container) {
-                //             const qBtn = container.querySelector('.question-btn');
-                //             if (qBtn) qBtn.click(); // triggers the existing click handler to open answer
-                //             container.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                //         }
-                //     }, 50);
-                // });
                 div.addEventListener('click', () => {
                     if (window.innerWidth <= MOBILE_BREAKPOINT) {
                         // Mobile: show full-screen answer
+                        activeMobileTopic = r.topic;
+                        activeMobileSubtopic = r.subtopic;
+
+                        // Make the main topic button active
+                        document.querySelectorAll(".main-topic-btn").forEach(btn => btn.classList.remove("active"));
+                        const mainBtn = [...document.querySelectorAll(".main-topic-btn")].find(b => b.textContent === r.topic);
+                        if (mainBtn) mainBtn.classList.add("active");
+
                         showMobileAnswer(r.topic, r.subtopic, r.item);
                     } else {
                         // Desktop: expand dropdowns and simulate clicks
