@@ -17,20 +17,23 @@
 
 <body>
     <div id="help-center">
-        <h2 class="">How can we help you?</h2>
-        <div class="search-wrapper">
-            <label for="search">
-                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="21" viewBox="0 0 22 21"
-                    fill="none">
-                    <path
-                        d="M14.286 13.9352C16.3666 16.4718 17.7301 17.9156 20.8549 20.5041M8.8134 16.1249C4.57529 16.1249 1.14844 12.698 1.14844 8.45989C1.14844 4.22177 4.57529 0.794922 8.8134 0.794922C13.0515 0.794922 16.4784 4.22177 16.4784 8.45989C16.4784 12.698 13.0515 16.1249 8.8134 16.1249Z"
-                        stroke="#A6A6A6" stroke-width="0.8" stroke-linecap="round" />
-                </svg>
-            </label>
-            <input type="text" id="search" placeholder="Search our help center...">
+        <div>
+            <h1 class="help-center-title">How can we help you?</h1>
+            <div class="search-wrapper">
+                <label for="search">
+                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="21"
+                        viewBox="0 0 22 21" fill="none">
+                        <path
+                            d="M14.286 13.9352C16.3666 16.4718 17.7301 17.9156 20.8549 20.5041M8.8134 16.1249C4.57529 16.1249 1.14844 12.698 1.14844 8.45989C1.14844 4.22177 4.57529 0.794922 8.8134 0.794922C13.0515 0.794922 16.4784 4.22177 16.4784 8.45989C16.4784 12.698 13.0515 16.1249 8.8134 16.1249Z"
+                            stroke="#A6A6A6" stroke-width="0.8" stroke-linecap="round" />
+                    </svg>
+                </label>
+                <input type="text" id="search" placeholder="Search our help center...">
+                <div id="search-results" class="search-results" aria-hidden="true"></div>
+
+            </div>
         </div>
 
-        <div id="search-results" class="search-results" aria-hidden="true"></div>
         <div class="breadcrumb" id="breadcrumb">Help Center</div>
 
         <div class="help-layout">
