@@ -17,6 +17,7 @@
 
 <body>
     <div id="help-center">
+        <h2 class="">How can we help you?</h2>
         <div class="search-wrapper">
             <label for="search">
                 <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="21" viewBox="0 0 22 21"
@@ -36,7 +37,10 @@
             <div id="sidebar" class="sidebar"></div>
 
             <!-- Mobile layout containers -->
-            <div id="mobile-topics" class="mobile-topics"></div>
+            <div>
+                <div id="mobile-topics" class="mobile-topics"></div>
+            </div>
+
             <div id="mobile-subtopics" class="mobile-subtopics"></div>
 
             <!-- <div id="help-content" class="content"></div> -->
@@ -72,7 +76,12 @@
                 "General": [
                     { "question": "What payment methods do you accept?", "answer": "We accept credit cards, debit cards, and e-wallets." }
                 ]
-            }
+            },
+            "Benz Test": {
+                "Testst": [
+                    { "question": "What payment methods do you accept?", "answer": "We accept credit cards, debit cards, and e-wallets." }
+                ]
+            },
         };
 
         const sidebar = document.getElementById('sidebar');
@@ -140,7 +149,7 @@
             mobileSubtopics.innerHTML = "";
 
             // Loop through main topics
-            Object.keys(helpData).forEach(topic => {
+            Object.keys(helpData).forEach((topic, idx) => {
                 const topicBtn = document.createElement("button");
                 topicBtn.textContent = topic;
                 topicBtn.className = "main-topic-btn";
@@ -209,6 +218,12 @@
                 });
 
                 mobileTopics.appendChild(topicBtn);
+
+                if (idx === 0) {
+                    activeMobileTopic = topic;
+                    topicBtn.classList.add("active");
+                    renderMobileSubtopics(topic);
+                }
             });
         }
 

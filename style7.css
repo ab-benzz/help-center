@@ -1,3 +1,8 @@
+:root {
+  --dropdown-transition-open: max-height 1s ease-in, opacity 0.3s ease-in;
+  --dropdown-transiton: 0.7s ease, max-height 0.4s ease;
+  --mv-side-space: 16px;
+}
 * {
   box-sizing: border-box;
   margin: 0;
@@ -7,12 +12,11 @@
 
 #help-center button {
   background-color: transparent;
-  border: unset;
+  /* border: unset; */
 }
 
 body {
   font-family: Arial, sans-serif;
-  margin: 20px;
   color: #222;
 }
 
@@ -20,6 +24,7 @@ body {
   max-width: 1000px;
   margin: auto;
   position: relative;
+  padding: 0 var(--mv-side-space, 16px);
 }
 
 #search {
@@ -102,7 +107,7 @@ body {
 }
 
 .subtopic-btn {
-  margin-left: 10px;
+  /* margin-left: 10px; */
   font-weight: 500;
   color: var(--Secondary-Gray, #646464);
   font-size: 16px;
@@ -124,13 +129,20 @@ body {
 }
 
 .dropdown-content {
-  overflow: hidden;
   max-height: 0;
-  transition: max-height 0.3s ease;
+  opacity: 0;
+  overflow: hidden;
+  transition: var(--dropdown-transition, 0.7s ease, max-height 0.4s ease);
 }
 
 .dropdown-content.open {
-  max-height: 500px;
+  transition: var(
+    --dropdown-transition-open,
+    max-height 1s ease-in,
+    opacity 0.3s ease-in
+  );
+  opacity: 1;
+  max-height: 999px;
 }
 
 #help-center mark {
@@ -260,6 +272,23 @@ body {
     text-overflow: ellipsis;
     max-width: 95%;
   }
+
+  div:has(> .mobile-topics) {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%); /* Center relative to viewport */
+  }
+
+  div:has(> .mobile-topics)::-webkit-scrollbar {
+    display: none;
+  }
+
+  .main-topic-btn:first-of-type {
+    margin-left: var(--mv-side-space, 16px);
+  }
+  .main-topic-btn:last-of-type {
+    margin-right: var(--mv-side-space, 16px);
+  }
+
   .mobile-topics {
     display: flex;
     gap: 8px;
@@ -268,15 +297,17 @@ body {
 
   .mobile-topics .main-topic-btn {
     padding: 8px;
-    border: 1px solid red !important;
-    border-radius: 20px;
+    border: 1px solid var(--Border-Dark-Stroke, #a6a6a6) !important;
+    border-radius: 12px;
+    text-wrap: nowrap;
   }
 
   .mobile-topics .main-topic-btn.active {
-    background-color: #e9f2ff; /* light blue */
-    color: #0047b3; /* darker text */
-    font-weight: 600;
+    color: #0047b3;
+    font-weight: 500;
     border-color: #0047b3;
+    border: 1px solid var(--Blue, #445ac8) !important;
+    background: #ebefff;
   }
 
   .mobile-subtopics {
@@ -293,6 +324,7 @@ body {
     color: var(--Primary-Black, #282727);
     width: 100%;
     text-align: start;
+    border: unset;
   }
 
   .mobile-subtopics .back-btn {
@@ -303,6 +335,8 @@ body {
     font-size: 14px;
     font-weight: 400;
     color: var(--Blue, #445ac8);
+    line-height: normal;
+    padding: 12.308px 52px 11.538px 10px;
   }
 
   .help-layout {
@@ -314,21 +348,23 @@ body {
     display: none;
   }
 
-  .dropdown-content {
+  /* .dropdown-content {
     transition: none;
-  }
+  } */
 
   .questions {
     max-height: 0;
     overflow: hidden;
-    /* display: none; */
-    transition: opacity 0.7s ease, max-height 0.4s ease;
-
+    transition: var(--dropdown-transition, 0.7s ease, max-height 0.4s ease);
     opacity: 0;
   }
 
   .questions.open {
-    transition: max-height 1s ease-in, opacity 0.3s ease-in;
+    transition: var(
+      --dropdown-transition-open,
+      max-height 1s ease-in,
+      opacity 0.3s ease-in
+    );
     max-height: 999px; /* edit if there are more subtopics*/
     opacity: 1;
   }
