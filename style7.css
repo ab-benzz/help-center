@@ -322,17 +322,14 @@ body {
     max-height: 0;
     overflow: hidden;
     /* display: none; */
+    transition: opacity 0.7s ease, max-height 0.4s ease;
+
     opacity: 0;
-    transition: max-height 0.8s ease-in, opacity 0.3s ease-in;
   }
 
   .questions.open {
-    max-height: 500px; /* big enough to fit most question lists */
+    transition: max-height 1s ease-in, opacity 0.3s ease-in;
+    max-height: 999px; /* edit if there are more subtopics*/
     opacity: 1;
-    /* display: block; */
-  }
-
-  .questions.closing {
-    transition: unset !important;
   }
 }
