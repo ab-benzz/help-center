@@ -414,16 +414,11 @@
                     snippet = (start > 0 ? '…' : '') + r.plainAnswer.slice(start, end) + (end < r.plainAnswer.length ? '…' : '');
                 }
 
-                //         div.innerHTML = `
-                //     <strong>${highlightMatch(r.item.question, query)}</strong>
-                //     <small>${r.topic} → ${r.subtopic}</small><br>
-                //     <span class="preview">${snippet}</span>
-                // `;
                 div.innerHTML = `
     <strong>${highlightMatch(r.item.question, query)}</strong><br>
     <small>${highlightMatch(r.topic, query)} → ${highlightMatch(r.subtopic, query)}</small><br>
-    <span class="preview">${highlightMatch(snippet, query)}</span>
 `;
+                // <span class="preview">${highlightMatch(snippet, query)}</span>
 
 
                 div.addEventListener('click', () => {

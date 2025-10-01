@@ -199,8 +199,9 @@ div:has(> .help-center-title) {
 }
 
 #help-center mark {
-  background: rgba(255, 255, 0, 0.462);
+  /* background: rgba(255, 255, 0, 0.462); */
   color: black;
+  background-color: unset;
 }
 
 .preview {
