@@ -10,6 +10,10 @@
   font-family: "Poppins", sans-serif;
 }
 
+html {
+  scrollbar-gutter: stable;
+  scroll-padding-top: 150px;
+}
 #help-center button {
   background-color: transparent;
   /* border: unset; */
@@ -25,6 +29,13 @@ body {
   margin: auto;
   position: relative;
   padding: 0 var(--mv-side-space, 16px);
+}
+
+.help-layout {
+  /* display: flex; */
+  display: none;
+  gap: 20px;
+  margin-top: 6px;
 }
 
 div:has(> .help-center-title) {
@@ -115,12 +126,6 @@ div:has(> .help-center-title) {
   cursor: pointer;
 }
 
-.help-layout {
-  display: flex;
-  gap: 20px;
-  margin-top: 6px;
-}
-
 .sidebar {
   flex: 0 0 260px;
   border-right: 1px solid #ddd;
@@ -199,9 +204,10 @@ div:has(> .help-center-title) {
 }
 
 #help-center mark {
-  /* background: rgba(255, 255, 0, 0.462); */
-  color: black;
   background-color: unset;
+  text-decoration: underline;
+  text-decoration-color: rgb(111, 152, 241);
+  text-underline-offset: 2px;
 }
 
 .preview {
