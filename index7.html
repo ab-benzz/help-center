@@ -40,47 +40,62 @@
         <div id="help-landing">
             <!-- <h2>Welcome to the Help Center</h2> -->
             <div>
-                <h2>Product Inquiry</h2>
-                <ul data-topic="Product Inquiry">
+                <h2>Shipping and Delivery</h2>
+                <ul data-topic="Shipping and Delivery">
                     <li>
-                        <button class="landing-topic" data-subtopic="Warranty and Repairs">
-                            Warranty and Repairs
+                        <button class="landing-topic" data-subtopic="Order Tracking">
+                            Order Tracking
                         </button>
                     </li>
                     <li>
-                        <button class="landing-topic" data-subtopic="Product Details">
-                            Product Details
+                        <button class="landing-topic" data-subtopic="Change or Cancel an Order">
+                            Change or Cancel an Order </button>
+                    </li>
+                    <li>
+                        <button class="landing-topic" data-subtopic="Missing Items">
+                            Missing Items
                         </button>
                     </li>
                     <li>
-                        <button class="landing-topic" data-subtopic="Test">
-                            Test
-                        </button>
-                    </li>
-                    <li>
-                        <button class="landing-topic" data-subtopic="Benz Pogi">
-                            Benz Pogi
-                        </button>
-                    </li>
-                </ul>
-            </div>
-            <div>
-                <h2>Payment & Promos</h2>
-                <ul data-topic="Payment & Promos">
-                    <li>
-                        <button class="landing-topic" data-subtopic="General">
-                            General
+                        <button class="landing-topic" data-subtopic="Order Concerns">
+                            Order Concerns
                         </button>
                     </li>
                 </ul>
             </div>
             <div>
-                <h2>Benz Test</h2>
-                <ul data-topic="Benz Test">
+                <h2>Aftersales Requests</h2>
+                <ul data-topic="Aftersales Requests">
                     <li>
-                        <button class="landing-topic" data-subtopic="Testst">
-                            Testst
+                        <button class="landing-topic" data-subtopic="Warranty & Repair">
+                            Warranty & Repair
                         </button>
+                    </li>
+                    <li>
+                        <button class="landing-topic" data-subtopic="Return, Refund, & Exchanges">
+                            Return, Refund, & Exchanges </button>
+                    </li>
+                    <li>
+                        <button class="landing-topic" data-subtopic="Request for Copies">
+                            Request for Copies
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <h2>Abenson Rewards</h2>
+                <ul data-topic="Abenson Rewards">
+                    <li>
+                        <button class="landing-topic" data-subtopic="Earn eCash">
+                            Earn eCash
+                        </button>
+                    </li>
+                    <li>
+                        <button class="landing-topic" data-subtopic="E-Cash Inquiry">
+                            E-Cash Inquiry </button>
+                    </li>
+                    <li>
+                        <button class="landing-topic" data-subtopic="Rewards Expiration">
+                            Rewards Expiration </button>
                     </li>
                 </ul>
             </div>
@@ -110,31 +125,48 @@
 
     <script>
         const helpData = {
-            "Product Inquiry": {
+            "Shipping and Delivery": {
+                "Order Tracking": [
+                    { "question": "How do I track my order?", "answer": "Specifications are listed on the product detail page under <b>Description</b>." }
+                ],
+                "Change or Cancel an Order": [
+                    { "question": "I’ve placed an order and realized I need to change some delivery details. What do I do?", "answer": "All our gadgets come with a 1-year warranty from the brand unless stated otherwise." },
+                    { "question": "Can I cancel my order?", "answer": "Yes! Just send us your:<ul><li>Name</li><li>Address</li><li>Product model</li><li>Order Number</li><li>Date of purchase</li></ul>Even without the receipt, we can validate your request." }
+                ],
+                "Missing Items": [
+                    { "question": "Some items from my order didn’t arrive. Help!", "answer": "Specifications are listed on the product detail page under <b>Description</b>." }
+                ],
+                "Order Concerns": [
+                    { "question": "What do I do if I miss my delivery?", "answer": "Specifications are listed on the product detail page under <b>Description</b>." }
+                ],
+            },
+            "Aftersales Requests": {
                 "Warranty and Repairs": [
                     { "question": "How long is the warranty?", "answer": "All our gadgets come with a 1-year warranty from the brand unless stated otherwise." },
                     { "question": "Can I still have my gadget repaired without the official receipt?", "answer": "Yes! Just send us your:<ul><li>Name</li><li>Address</li><li>Product model</li><li>Order Number</li><li>Date of purchase</li></ul>Even without the receipt, we can validate your request." },
+                    { "question": "Can I get my gadget fixed after the warranty expires?", "answer": "Yes! Just send us your:<ul><li>Name</li><li>Address</li><li>Product model</li><li>Order Number</li><li>Date of purchase</li></ul>Even without the receipt, we can validate your request." },
+                    { "question": "Who do I contact for product issues?", "answer": "Yes! Just send us your:<ul><li>Name</li><li>Address</li><li>Product model</li><li>Order Number</li><li>Date of purchase</li></ul>Even without the receipt, we can validate your request." },
                 ],
-                "Product Details": [
-                    { "question": "How can I see product specifications?", "answer": "Specifications are listed on the product detail page under <b>Description</b>." }
+                "Return, Refund, & Exchanges": [
+                    { "question": "I got a defective item. Can I exchange it?", "answer": "We accept credit cards, debit cards, and e-wallets." },
+                    { "question": "I changed my mind. Can I swap it for a different model?", "answer": "We accept credit cards, debit cards, and e-wallets." },
+                    { "question": "I received a damaged, wrong, or defective item. What now?", "answer": "We accept credit cards, debit cards, and e-wallets." },
+                    { "question": "When will I get my refund?", "answer": "We accept credit cards, debit cards, and e-wallets." },
                 ],
-                "Test": [
-                    { "question": "How long is the warranty?", "answer": "All our gadgets come with a 1-year warranty from the brand unless stated otherwise." },
-                    { "question": "Can I still have my gadget repaired without the official receipt?", "answer": "Yes! Just send us your:<ul><li>Name</li><li>Address</li><li>Product model</li><li>Order Number</li><li>Date of purchase</li></ul>Even without the receipt, we can validate your request." }
-                ],
-                "Benz Pogi": [
-                    { "question": "How can I see product specifications?", "answer": "Specifications are listed on the product detail page under <b>Description</b>." }
+                "Request for Copies": [
+                    { "question": "How do I request a copy of my order receipt or warranty?", "answer": "We accept credit cards, debit cards, and e-wallets." },
                 ]
             },
-            "Payment & Promos": {
-                "General": [
-                    { "question": "What payment methods do you accept?", "answer": "We accept credit cards, debit cards, and e-wallets." }
-                ]
-            },
-            "Benz Test": {
-                "Testst": [
-                    { "question": "What payment methods do you accept?", "answer": "We accept credit cards, debit cards, and e-wallets." }
-                ]
+            "Abenson Rewards": {
+                "Earn eCash": [
+                    { "question": "How do I earn eCash?", "answer": "We accept credit cards, debit cards, and e-wallets." }
+                ],
+                "E-Cash Inquiry": [
+                    { "question": "How do I check my eCash balance?", "answer": "We accept credit cards, debit cards, and e-wallets." }
+                ],
+                "Rewards Expiration": [
+                    { "question": "Does my Abenson Rewards eCash expire?", "answer": "We accept credit cards, debit cards, and e-wallets." }
+                ],
             },
         };
 
@@ -725,72 +757,6 @@
             });
         });
 
-
-        // document.querySelectorAll('.landing-topic').forEach(btn => {
-        //     btn.addEventListener('click', () => {
-        //         const ul = btn.closest('ul');
-        //         const topic = ul.dataset.topic;
-        //         const subtopic = btn.dataset.subtopic;
-
-        //         // Set hash like #Product-Inquiry/Benz-Pogi
-        //         window.location.hash = `${encodeURIComponent(topic)}/${encodeURIComponent(subtopic)}`;
-
-        //         // Show help layout
-        //         document.getElementById('help-landing').style.display = 'none';
-        //         document.querySelector('.help-layout').style.display = 'flex';
-
-
-        //         // RESET MOBILE STATES
-        //         activeMobileTopic = null;
-        //         activeMobileSubtopic = null;
-        //         document.querySelectorAll('#mobile-topics .main-topic-btn').forEach(b => b.classList.remove('active'));
-        //         document.querySelectorAll('#mobile-subtopics .subtopic-btn').forEach(b => b.classList.remove('active'));
-        //         document.querySelectorAll('#mobile-subtopics .questions').forEach(q => q.classList.remove('open'));
-
-
-        //         if (window.innerWidth <= 768) {
-        //             // MOBILE: reset all active states
-        //             resetMobileDOM();
-
-        //             // MOBILE: render sidebar and open the subtopic dropdown
-        //             renderMobileSidebar();
-        //             activeMobileTopic = topic;
-        //             activeMobileSubtopic = subtopic;
-
-        //             const subBtn = [...document.querySelectorAll('#mobile-subtopics .subtopic-btn')]
-        //                 .find(b => b.textContent === subtopic);
-        //             if (subBtn) {
-        //                 subBtn.classList.add('active');
-        //                 const qContainer = subBtn.nextElementSibling;
-        //                 if (qContainer) qContainer.classList.add('open'); // only open subtopic dropdown
-        //             }
-        //         } else {
-        //             // DESKTOP: reset previous active/open states
-        //             document.querySelectorAll('.topic-btn').forEach(btn => btn.nextElementSibling.classList.remove('open'));
-        //             document.querySelectorAll('.subtopic-btn').forEach(btn => btn.classList.remove('active'));
-
-        //             // DESKTOP: expand topic dropdown and show questions
-        //             const topicBtn = [...document.querySelectorAll('.topic-btn')]
-        //                 .find(b => b.textContent.includes(topic));
-        //             if (topicBtn) {
-        //                 const subtopicDiv = topicBtn.nextElementSibling;
-        //                 if (subtopicDiv) subtopicDiv.classList.add('open'); // open main topic dropdown
-
-        //                 const subBtn = [...subtopicDiv.querySelectorAll('.subtopic-btn')]
-        //                     .find(b => b.textContent === subtopic);
-        //                 if (subBtn) {
-        //                     subBtn.classList.add('active');
-        //                     renderQuestions(subtopic, helpData[topic][subtopic]); // render questions for desktop
-        //                 }
-        //             }
-        //         }
-
-        //         // Update breadcrumb
-        //         updateBreadcrumb([topic, subtopic]);
-        //     });
-        // });
-
-
         document.addEventListener('click', (e) => {
             if (e.target && e.target.id === 'breadcrumb-home') {
                 e.preventDefault();
@@ -830,7 +796,7 @@
                 breadcrumb.innerHTML = `<a href="#" id="breadcrumb-home">Help Center</a> > ${path[0]}`;
             } else if (path.length === 2) {
                 // Subtopic level
-                breadcrumb.innerHTML = `<a href="#" id="breadcrumb-home">Help Center</a> > ${path[0]} > ${path[1]}`;
+                breadcrumb.innerHTML = `<a href="#" id="breadcrumb-home">Help Center</a> > ${path[0]}`;
             }
         }
 
