@@ -16,112 +16,164 @@
 </head>
 
 <body>
-    <div id="help-center">
-        <div>
-            <h1 class="help-center-title">How can we help you?</h1>
-            <div class="search-wrapper">
-                <label for="search">
-                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="21"
-                        viewBox="0 0 22 21" fill="none">
-                        <path
-                            d="M14.286 13.9352C16.3666 16.4718 17.7301 17.9156 20.8549 20.5041M8.8134 16.1249C4.57529 16.1249 1.14844 12.698 1.14844 8.45989C1.14844 4.22177 4.57529 0.794922 8.8134 0.794922C13.0515 0.794922 16.4784 4.22177 16.4784 8.45989C16.4784 12.698 13.0515 16.1249 8.8134 16.1249Z"
-                            stroke="#A6A6A6" stroke-width="0.8" stroke-linecap="round" />
-                    </svg>
-                </label>
-                <input type="text" id="search" placeholder="Search our help center...">
-                <div id="search-results" class="search-results" aria-hidden="true"></div>
-
-            </div>
-        </div>
-
-        <div class="breadcrumb" id="breadcrumb">Help Center</div>
-
-
-        <div id="help-landing">
-            <!-- <h2>Welcome to the Help Center</h2> -->
+    <main>
+        <div id="help-center">
             <div>
-                <h2>Shipping and Delivery</h2>
-                <ul data-topic="Shipping and Delivery">
-                    <li>
-                        <button class="landing-topic" data-subtopic="Order Tracking">
-                            Order Tracking
-                        </button>
-                    </li>
-                    <li>
-                        <button class="landing-topic" data-subtopic="Change or Cancel an Order">
-                            Change or Cancel an Order </button>
-                    </li>
-                    <li>
-                        <button class="landing-topic" data-subtopic="Missing Items">
-                            Missing Items
-                        </button>
-                    </li>
-                    <li>
-                        <button class="landing-topic" data-subtopic="Order Concerns">
-                            Order Concerns
-                        </button>
-                    </li>
-                </ul>
-            </div>
-            <div>
-                <h2>Aftersales Requests</h2>
-                <ul data-topic="Aftersales Requests">
-                    <li>
-                        <button class="landing-topic" data-subtopic="Warranty & Repair">
-                            Warranty & Repair
-                        </button>
-                    </li>
-                    <li>
-                        <button class="landing-topic" data-subtopic="Return, Refund, & Exchanges">
-                            Return, Refund, & Exchanges </button>
-                    </li>
-                    <li>
-                        <button class="landing-topic" data-subtopic="Request for Copies">
-                            Request for Copies
-                    </li>
-                </ul>
-            </div>
-            <div>
-                <h2>Abenson Rewards</h2>
-                <ul data-topic="Abenson Rewards">
-                    <li>
-                        <button class="landing-topic" data-subtopic="Earn eCash">
-                            Earn eCash
-                        </button>
-                    </li>
-                    <li>
-                        <button class="landing-topic" data-subtopic="E-Cash Inquiry">
-                            E-Cash Inquiry </button>
-                    </li>
-                    <li>
-                        <button class="landing-topic" data-subtopic="Rewards Expiration">
-                            Rewards Expiration </button>
-                    </li>
-                </ul>
-            </div>
-        </div>
+                <h1 class="help-center-title">How can we help you?</h1>
+                <div class="search-wrapper">
+                    <label for="search">
+                        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="21"
+                            viewBox="0 0 22 21" fill="none">
+                            <path
+                                d="M14.286 13.9352C16.3666 16.4718 17.7301 17.9156 20.8549 20.5041M8.8134 16.1249C4.57529 16.1249 1.14844 12.698 1.14844 8.45989C1.14844 4.22177 4.57529 0.794922 8.8134 0.794922C13.0515 0.794922 16.4784 4.22177 16.4784 8.45989C16.4784 12.698 13.0515 16.1249 8.8134 16.1249Z"
+                                stroke="#A6A6A6" stroke-width="0.8" stroke-linecap="round" />
+                        </svg>
+                    </label>
+                    <input type="text" id="search" placeholder="Search our help center..." autocomplete="off">
+                    <div id="search-results" class="search-results" aria-hidden="true"></div>
 
-
-        <div class="help-layout">
-            <div id="sidebar" class="sidebar"></div>
-
-            <!-- Mobile layout containers -->
-            <div>
-                <div id="mobile-topics" class="mobile-topics"></div>
+                </div>
             </div>
 
-            <div id="mobile-subtopics" class="mobile-subtopics"></div>
+            <a class="breadcrumb" id="breadcrumb">Help Center</a>
 
-            <!-- <div id="help-content" class="content"></div> -->
-            <div class="content-wrapper">
-                <div id="help-content" class="content"></div>
-                <div class="support-cta">
-                    Still can’t find what you are looking for?
-                    <a href="/support-ticket" class="cta-link">Submit a ticket!</a>
+
+            <div id="help-landing">
+                <!-- Browse Help Topics -->
+                <section id="help-center-topics">
+                    <div class="landing-header">
+                        <h2 class="helpcenter-section-title">Browse ABZ Help Topics</h2>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="212" height="10" viewBox="0 0 212 10"
+                            fill="none">
+                            <path
+                                d="M2 6.2842C29.017 2.68078 56.6651 2.108 83.947 2.00556C126.18 1.84697 167.975 5.11317 210 8"
+                                stroke="#445AC8" stroke-width="3" stroke-linecap="round" />
+                        </svg>
+                    </div>
+
+                    <div class="landing-topics-container">
+                        <div>
+                            <img src="images/sd_helpcenter.png" alt="">
+                            <h2>Shipping and Delivery</h2>
+                            <ul data-topic="Shipping and Delivery">
+                                <li>
+                                    <button class="landing-topic" data-subtopic="Order Tracking">
+                                        Order Tracking
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="landing-topic" data-subtopic="Change or Cancel an Order">
+                                        Change or Cancel an Order </button>
+                                </li>
+                                <li>
+                                    <button class="landing-topic" data-subtopic="Missing Items">
+                                        Missing Items
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="landing-topic" data-subtopic="Order Concerns">
+                                        Order Concerns
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <img src="images/ar_helpcenter.png" alt="" width="85" height="85">
+                            <h2>Aftersales Requests</h2>
+                            <ul data-topic="Aftersales Requests">
+                                <li>
+                                    <button class="landing-topic" data-subtopic="Warranty & Repairs">
+                                        Warranty & Repairs
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="landing-topic" data-subtopic="Return, Refund, & Exchanges">
+                                        Return, Refund, & Exchanges
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="landing-topic" data-subtopic="Request for Copies">
+                                        Request for Copies
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <img src="images/abr_helpcenter.png" alt="" width="85" height="85">
+                            <h2>Abenson Rewards</h2>
+                            <ul data-topic="Abenson Rewards">
+                                <li>
+                                    <button class="landing-topic" data-subtopic="Earn eCash">
+                                        Earn eCash
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="landing-topic" data-subtopic="E-Cash Inquiry">
+                                        E-Cash Inquiry </button>
+                                </li>
+                                <li>
+                                    <button class="landing-topic" data-subtopic="Rewards Expiration">
+                                        Rewards Expiration </button>
+                                </li>
+                            </ul>
+                        </div>
+                </section>
+
+                <!-- CTA Section -->
+                <section id="help-center-cta">
+                    <h2>Can’t find what you are looking for?</h2>
+                    <p>
+                        If you have a question or need assistance, please don't hesitate to reach out by submitting
+                        a
+                        ticket.
+                    </p>
+
+                    <div>
+                        <a href="#">Submit a ticket</a>
+                        <a href="#">Track Ticket</a>
+                    </div>
+                    <img src="images/helpcenter_cta_smiley.png" alt="" class="helpcenter-cta-blob smiley">
+                    <img src="images/helpcenter_cta_search.png" alt="" class="helpcenter-cta-blob search">
+                    <img src="images/helpcenter_cta_stars.png" alt="" class="helpcenter-cta-blob stars">
+                </section>
+
+                <!-- FAQ Section -->
+                <section id="help-center-faq">
+                    <div class="landing-header">
+                        <h2 class="helpcenter-section-title">Frequently Asked Questions</h2>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="212" height="10" viewBox="0 0 212 10"
+                            fill="none">
+                            <path
+                                d="M2 6.2842C29.017 2.68078 56.6651 2.108 83.947 2.00556C126.18 1.84697 167.975 5.11317 210 8"
+                                stroke="#445AC8" stroke-width="3" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <div class="faq" id="faqContainer"></div>
+                </section>
+            </div>
+            </section>
+
+
+            <div class="help-layout">
+                <div id="sidebar" class="sidebar"></div>
+
+                <!-- Mobile layout containers -->
+                <div>
+                    <div id="mobile-topics" class="mobile-topics"></div>
+                </div>
+
+                <div id="mobile-subtopics" class="mobile-subtopics"></div>
+
+                <!-- <div id="help-content" class="content"></div> -->
+                <div class="content-wrapper">
+                    <div id="help-content" class="content"></div>
+                    <div class="support-cta">
+                        Still can’t find what you are looking for?
+                        <a href="/support-ticket" class="cta-link">Submit a ticket!</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
     <script>
         const helpData = {
@@ -141,7 +193,7 @@
                 ],
             },
             "Aftersales Requests": {
-                "Warranty and Repairs": [
+                "Warranty & Repairs": [
                     { "question": "How long is the warranty?", "answer": "All our gadgets come with a 1-year warranty from the brand unless stated otherwise." },
                     { "question": "Can I still have my gadget repaired without the official receipt?", "answer": "Yes! Just send us your:<ul><li>Name</li><li>Address</li><li>Product model</li><li>Order Number</li><li>Date of purchase</li></ul>Even without the receipt, we can validate your request." },
                     { "question": "Can I get my gadget fixed after the warranty expires?", "answer": "Yes! Just send us your:<ul><li>Name</li><li>Address</li><li>Product model</li><li>Order Number</li><li>Date of purchase</li></ul>Even without the receipt, we can validate your request." },
@@ -761,7 +813,7 @@
             if (e.target && e.target.id === 'breadcrumb-home') {
                 e.preventDefault();
                 // Show landing page
-                document.getElementById('help-landing').style.display = 'block';
+                document.getElementById('help-landing').style.display = 'flex';
                 document.querySelector('.help-layout').style.display = 'none';
 
                 // Reset breadcrumb to just "Help Center"
@@ -806,7 +858,7 @@
             const layout = document.querySelector('.help-layout');
 
             if (!hash || hash === 'home') {
-                landing.style.display = 'block';
+                landing.style.display = 'flex';
                 layout.style.display = 'none';
                 document.getElementById('breadcrumb').textContent = 'Help Center';
             } else {
@@ -816,6 +868,80 @@
 
         window.addEventListener('DOMContentLoaded', handleHash);
         window.addEventListener('hashchange', handleHash);
+    </script>
+
+
+    <script>
+        // FAQ data
+        const faqs = [
+            {
+                question: "How can I reset my password?",
+                answer: "Go to your account settings, choose 'Security', and click 'Reset Password'. You’ll receive an email with a reset link."
+            },
+            {
+                question: "Where can I track my order?",
+                answer: "You can track your order in the 'My Orders' section. Each order has a 'Track' button with real-time shipping updates."
+            },
+            {
+                question: "Can I return a product?",
+                answer: "Yes. Products can be returned within 7 days if they are in original condition and packaging. Check our return policy for details."
+            }
+        ];
+
+        //  SVG icons
+        const plusSVG = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M12 5v14M5 12h14"/>
+    </svg>`;
+        const closeSVG = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M6 6l12 12M6 18L18 6"/>
+    </svg>`;
+
+        const faqContainer = document.getElementById("faqContainer");
+
+        faqs.forEach(({ question, answer }) => {
+            const item = document.createElement("article");
+            item.className = "faq-item";
+            item.innerHTML = `
+      <button class="faq-btn">
+        <strong class="faq-question">${question}</strong>
+        <span class="icon">${plusSVG}</span>
+      </button>
+      <p class="faq-answer">${answer}</p>
+    `;
+
+            const btn = item.querySelector(".faq-btn");
+            const answerEl = item.querySelector(".faq-answer");
+            const icon = item.querySelector(".icon");
+
+            btn.addEventListener("click", () => {
+                const isOpen = item.classList.contains("open");
+
+                // close any open item (optional, remove if you want multiple open)
+                document.querySelectorAll(".faq-item.open").forEach(openItem => {
+                    if (openItem !== item) {
+                        openItem.classList.remove("open");
+                        const ans = openItem.querySelector(".faq-answer");
+                        ans.style.height = 0;
+                        ans.previousElementSibling.querySelector(".icon").innerHTML = plusSVG;
+                    }
+                });
+
+                // toggle this one
+                if (isOpen) {
+                    answerEl.style.height = 0;
+                    item.classList.remove("open");
+                    icon.innerHTML = plusSVG;
+                } else {
+                    answerEl.style.height = answerEl.scrollHeight + "px";
+                    item.classList.add("open");
+                    icon.innerHTML = closeSVG;
+                }
+            });
+
+            faqContainer.appendChild(item);
+        });
     </script>
 </body>
 
