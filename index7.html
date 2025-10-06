@@ -450,7 +450,6 @@
             mobileSubtopics.appendChild(ansDiv);
 
             // window.location.hash = makeId(question.question);
-
         }
 
         function renderQuestions(subtopic, questions) {
@@ -701,7 +700,6 @@
         // Run when resizing (but only if layout actually changes)
         window.addEventListener("resize", init);
 
-
         init();
         openQuestionFromHash();
         window.addEventListener('hashchange', openQuestionFromHash);
@@ -837,6 +835,7 @@
                 openQuestionFromHash();
             }
         }
+
 
         window.addEventListener('DOMContentLoaded', handleHash);
         window.addEventListener('hashchange', handleHash);
