@@ -241,7 +241,13 @@
                 // Main topic button
                 const topicBtn = document.createElement('button');
                 topicBtn.className = 'topic-btn';
-                topicBtn.innerHTML = topic + ' <span class="arrow">▾</span>';
+                topicBtn.innerHTML = `
+            <span class="topic-label">${topic}</span>
+            <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" 
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        `;
                 wrapperDiv.appendChild(topicBtn);
 
                 // Subtopic container
@@ -252,12 +258,6 @@
                     const subBtn = document.createElement('button');
                     subBtn.className = 'subtopic-btn';
                     subBtn.textContent = subtopic;
-
-                    // Make the first subtopic active by default
-                    // if (index === 0) {
-                    //     subBtn.classList.add('active');
-                    //     renderQuestions(subtopic, helpData[topic][subtopic]);
-                    // }
 
                     subBtn.addEventListener('click', () => {
                         [...sidebar.querySelectorAll('.subtopic-btn')].forEach(b => b.classList.remove('active'));
@@ -281,6 +281,7 @@
                 // Toggle dropdown on topic click
                 topicBtn.addEventListener('click', () => {
                     subtopicDiv.classList.toggle('open');
+                    topicBtn.classList.toggle('open');
                 });
             });
         }
@@ -304,65 +305,14 @@
                     activeMobileSubtopic = null; // reset subtopic
 
                     // Update breadcrumb immediately
-                    // document.getElementById("breadcrumb").textContent = `Help Center > ${topic}`;
-                    // document.getElementById("breadcrumb").innerHTML = `<a href="#" id="breadcrumb-home">Help Center</a> > ${topic}`;
                     updateBreadcrumb([topic]);
-
 
                     // Update active class for main topics
                     document.querySelectorAll(".main-topic-btn").forEach(btn => btn.classList.remove("active"));
                     topicBtn.classList.add("active");
 
-                    // Remove active class from all main topic buttons
-                    // document.querySelectorAll(".main-topic-btn").forEach(btn => btn.classList.remove("active"));
-
-                    // Add active class to the clicked button
-                    topicBtn.classList.add("active");
-
-                    mobileSubtopics.innerHTML = "";
-
-                    // Loop through subtopics for this topic
-                    Object.keys(helpData[topic]).forEach(sub => {
-                        const subDiv = document.createElement("div");
-                        subDiv.className = "mobile-subtopic";
-
-                        const subBtn = document.createElement("button");
-                        subBtn.textContent = sub;
-                        subBtn.className = "subtopic-btn";
-
-                        const qContainer = document.createElement("div");
-                        qContainer.className = "questions";
-                        // qContainer.style.display = "none";
-                        // qContainer.classList.toggle("open");
-
-                        helpData[topic][sub].forEach(q => {
-                            const qBtn = document.createElement("button");
-                            qBtn.textContent = q.question;
-                            qBtn.className = "question-btn";
-                            // qBtn.addEventListener("click", () => showAnswer(q));
-                            qBtn.addEventListener("click", () => {
-                                showMobileAnswer(topic, sub, q);
-                            });
-                            qContainer.appendChild(qBtn);
-                        });
-
-
-                        subBtn.addEventListener("click", () => {
-                            if (!qContainer.classList.contains("open")) {
-                                document.querySelectorAll("#mobile-subtopics .questions.open").forEach(el => {
-                                    if (el !== qContainer) {
-                                        el.classList.remove("open");   // instantly close
-                                    }
-                                });
-                            }
-                            qContainer.classList.toggle("open");
-
-                        });
-
-                        subDiv.appendChild(subBtn);
-                        subDiv.appendChild(qContainer);
-                        mobileSubtopics.appendChild(subDiv);
-                    });
+                    // Render subtopics using the shared function (injects svg, handlers etc.)
+                    renderMobileSubtopics(topic);
                 });
 
                 mobileTopics.appendChild(topicBtn);
@@ -375,14 +325,11 @@
             });
         }
 
-
-
         function renderMobileSubtopics(topic) {
             const mobileSubtopics = document.getElementById("mobile-subtopics");
             mobileSubtopics.innerHTML = "";
 
             // Update breadcrumb
-            // document.getElementById("breadcrumb").textContent = `Help Center > ${topic}`;
             document.getElementById("breadcrumb").innerHTML = `<a href="#" id="breadcrumb-home">Help Center</a> > ${topic}`;
 
             // Highlight active main topic
@@ -397,7 +344,14 @@
 
                 const subBtn = document.createElement("button");
                 subBtn.className = "subtopic-btn";
-                subBtn.textContent = sub;
+                // inject label + arrow svg (consistent)
+                subBtn.innerHTML = `
+            <span class="label">${sub}</span>
+            <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        `;
 
                 const qContainer = document.createElement("div");
                 qContainer.className = "questions";
@@ -415,15 +369,30 @@
                 });
 
                 // Restore previously active subtopic dropdown
-                if (activeMobileSubtopic === sub) qContainer.classList.add("open");
+                // if (activeMobileSubtopic === sub) qContainer.classList.add("open");
+                if (activeMobileSubtopic === sub) {
+                    qContainer.classList.add("open");
+                    subBtn.classList.add("active");
+                    subBtn.classList.add("open"); // <-- flips arrow
+                }
 
                 // Subtopic click → toggle open, close others
                 subBtn.addEventListener("click", () => {
+                    // close other open question containers
                     document.querySelectorAll("#mobile-subtopics .questions.open").forEach(el => {
-                        if (el !== qContainer) el.classList.remove("open");
+                        // if (el !== qContainer) el.classList.remove("open");
+                        if (el !== qContainer) {
+                            el.classList.remove("open");
+                            const btn = el.previousElementSibling; // get corresponding subBtn
+                            if (btn) btn.classList.remove("open");
+                        }
                     });
+
                     qContainer.classList.toggle("open");
                     activeMobileSubtopic = qContainer.classList.contains("open") ? sub : null;
+
+                    // keep arrow in sync
+                    subBtn.classList.toggle("open", qContainer.classList.contains("open"));
                 });
 
                 subDiv.appendChild(subBtn);
@@ -779,6 +748,7 @@
                     const subBtn = [...document.querySelectorAll(".subtopic-btn")].find(b => b.textContent === subtopic);
                     if (subBtn) {
                         subBtn.classList.add("active");
+                        subBtn.classList.add("open");
                         const qContainer = subBtn.nextElementSibling;
                         if (qContainer) qContainer.classList.add("open");
                     }
@@ -786,6 +756,7 @@
                     // DESKTOP: reset previous active/open states
                     document.querySelectorAll('.topic-btn').forEach(btn => btn.nextElementSibling.classList.remove('open'));
                     document.querySelectorAll('.subtopic-btn').forEach(btn => btn.classList.remove('active'));
+                    document.querySelectorAll('.topic-btn').forEach(btn => btn.classList.remove('open'));
 
                     // DESKTOP: expand topic dropdown and show questions
                     const topicBtn = [...document.querySelectorAll('.topic-btn')]
@@ -793,6 +764,7 @@
                     if (topicBtn) {
                         const subtopicDiv = topicBtn.nextElementSibling;
                         if (subtopicDiv) subtopicDiv.classList.add('open'); // open main topic dropdown
+                        topicBtn.classList.add('open');
 
                         const subBtn = [...subtopicDiv.querySelectorAll('.subtopic-btn')]
                             .find(b => b.textContent === subtopic);

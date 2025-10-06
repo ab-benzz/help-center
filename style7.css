@@ -239,7 +239,9 @@ div:has(> .help-center-title) {
 }
 
 .sidebar button {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   width: 100%;
   padding: 8px;
   margin-bottom: 2px;
@@ -264,7 +266,18 @@ div:has(> .help-center-title) {
   color: #0047b3;
 }
 
+.topic-btn.open .arrow-icon {
+  transform: scaleY(-1);
+}
+
+.arrow-icon {
+  transition: transform 0.3s ease;
+}
+
 .subtopic-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   /* margin-left: 10px; */
   font-weight: 500;
   color: var(--Secondary-Gray, #646464);
@@ -278,6 +291,15 @@ div:has(> .help-center-title) {
   /* background: #d0e2ff; */
   color: var(--Blue, #445ac8);
   font-weight: 500;
+}
+
+.subtopic-btn .arrow-icon {
+  transition: transform 0.3s ease;
+  transform-origin: center;
+}
+
+.subtopic-btn.open .arrow-icon {
+  transform: scaleY(-1); /* flips vertically */
 }
 
 .breadcrumb {
